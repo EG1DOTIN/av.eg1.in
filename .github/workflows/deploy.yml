@@ -106,7 +106,7 @@ jobs:
         with:
           path: '.'
 
-  deploy:
+  deploy-pages:
     name: Deploy to GitHub Pages
     needs: validate-and-build
     if: ${{ github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') }}
@@ -118,3 +118,22 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  deploy-firebase:
+    name: Deploy to Firebase Hosting (av.eg1.in)
+    needs: validate-and-build
+    if: ${{ github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Website Repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_EG1_PYEGCLAMUI }}'
+          channelId: live
+          projectId: eg1-pyegclamui

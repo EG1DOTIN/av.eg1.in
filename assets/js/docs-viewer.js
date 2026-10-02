@@ -350,6 +350,59 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // --------------------------------------------------------------------------
+  // 6.5. Lazy-Load Mermaid.js (On-Demand Diagram Engine)
+  // Saves ~3.3MB (800KB compressed) on initial documentation page load.
+  // --------------------------------------------------------------------------
+  let mermaidLoadingPromise = null;
+
+  function ensureMermaidLoaded() {
+    if (typeof mermaid !== 'undefined') {
+      return Promise.resolve(window.mermaid);
+    }
+    if (mermaidLoadingPromise) {
+      return mermaidLoadingPromise;
+    }
+    mermaidLoadingPromise = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'assets/vendor/mermaid.min.js';
+      script.async = true;
+      script.onload = () => {
+        if (typeof mermaid !== 'undefined') {
+          try {
+            mermaid.initialize({
+              startOnLoad: false,
+              theme: 'dark',
+              themeVariables: {
+                darkMode: true,
+                background: '#0d0e12',
+                primaryColor: '#1b1b24',
+                primaryTextColor: '#f4f4f6',
+                primaryBorderColor: '#00dc82',
+                lineColor: '#38bdf8',
+                secondaryColor: '#15151c',
+                tertiaryColor: '#101015'
+              },
+              securityLevel: 'loose'
+            });
+          } catch (initErr) {
+            console.warn('Mermaid initialization warning:', initErr);
+          }
+          resolve(window.mermaid);
+        } else {
+          mermaidLoadingPromise = null;
+          reject(new Error('Mermaid script loaded but window.mermaid undefined.'));
+        }
+      };
+      script.onerror = (err) => {
+        mermaidLoadingPromise = null;
+        reject(err);
+      };
+      document.head.appendChild(script);
+    });
+    return mermaidLoadingPromise;
+  }
+
+  // --------------------------------------------------------------------------
   // 7. Load & Render Selected Document
   // --------------------------------------------------------------------------
   async function loadDocument(docId, targetAnchor = '') {
@@ -409,31 +462,20 @@ document.addEventListener('DOMContentLoaded', () => {
       Prism.highlightAllUnder(markdownContainer);
     }
 
-    // Post-Process: Initialize Mermaid Diagrams
-    if (typeof mermaid !== 'undefined') {
-      const mermaidNodes = markdownContainer.querySelectorAll('.mermaid');
-      if (mermaidNodes.length > 0) {
-        try {
-          mermaid.initialize({
-            startOnLoad: false,
-            theme: 'dark',
-            themeVariables: {
-              darkMode: true,
-              background: '#0d0e12',
-              primaryColor: '#1b1b24',
-              primaryTextColor: '#f4f4f6',
-              primaryBorderColor: '#00dc82',
-              lineColor: '#38bdf8',
-              secondaryColor: '#15151c',
-              tertiaryColor: '#101015'
-            },
-            securityLevel: 'loose'
-          });
-          mermaid.run({ nodes: mermaidNodes });
-        } catch (mermaidErr) {
+    // Post-Process: Lazy-load & Render Mermaid Diagrams on-demand
+    // Saves ~3.3MB (800KB compressed) on initial doc page load
+    const mermaidNodes = markdownContainer.querySelectorAll('.mermaid');
+    if (mermaidNodes.length > 0) {
+      ensureMermaidLoaded()
+        .then((m) => {
+          const currentNodes = markdownContainer.querySelectorAll('.mermaid');
+          if (currentNodes.length > 0 && typeof m.run === 'function') {
+            m.run({ nodes: currentNodes });
+          }
+        })
+        .catch((mermaidErr) => {
           console.warn('Mermaid rendering notice:', mermaidErr);
-        }
-      }
+        });
     }
 
     // Attach Copy Handlers to Code Blocks

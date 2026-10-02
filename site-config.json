@@ -1,0 +1,47 @@
+{
+  "project": {
+    "name": "pyEGClamUI",
+    "version": "3.0.0",
+    "releaseStage": "Beta Release",
+    "tagline": "An Open-Source, Cross-Platform Desktop GUI for ClamAV",
+    "license": "GNU GPL-3.0"
+  },
+  "github": {
+    "repo": "https://github.com/EG1DOTIN/pyEGClamUI",
+    "issues": "https://github.com/EG1DOTIN/pyEGClamUI/issues",
+    "releases": "https://github.com/EG1DOTIN/pyEGClamUI/releases"
+  },
+  "contact": {
+    "url": "https://www.eg1.in/contact",
+    "privacyPolicy": "https://eg1.in/privacypolicy.html",
+    "officialSite": "https://eg1.in"
+  },
+  "downloads": {
+    "windows": "https://github.com/EG1DOTIN/pyEGClamUI/releases/latest/download/pyegclamui-windows-x64.zip",
+    "linux": "https://github.com/EG1DOTIN/pyEGClamUI/releases/latest/download/pyegclamui-linux-x86_64.tar.gz",
+    "macos": "https://github.com/EG1DOTIN/pyEGClamUI/releases/latest/download/pyegclamui-macos.zip"
+  },
+  "platforms": {
+    "windows": {
+      "stage": "Beta Release",
+      "package": "pyegclamui-windows-x64.zip",
+      "downloadUrl": "https://github.com/EG1DOTIN/pyEGClamUI/releases/latest/download/pyegclamui-windows-x64.zip",
+      "winget": "winget install Cisco.ClamAV",
+      "pip": "pip install pyegclamui"
+    },
+    "linux": {
+      "stage": "Beta Release",
+      "package": "pyegclamui-linux-x86_64.tar.gz",
+      "downloadUrl": "https://github.com/EG1DOTIN/pyEGClamUI/releases/latest/download/pyegclamui-linux-x86_64.tar.gz",
+      "apt": "sudo apt update && sudo apt install -y clamav clamav-daemon && pip install pyegclamui",
+      "dnf": "sudo dnf install -y clamav clamd clamav-update && pip install pyegclamui",
+      "pacman": "sudo pacman -S clamav && pip install pyegclamui"
+    },
+    "macos": {
+      "stage": "Beta Release",
+      "package": "pyegclamui-macos.zip",
+      "downloadUrl": "https://github.com/EG1DOTIN/pyEGClamUI/releases/latest/download/pyegclamui-macos.zip",
+      "brew": "brew install clamav && pip install pyegclamui"
+    }
+  }
+}

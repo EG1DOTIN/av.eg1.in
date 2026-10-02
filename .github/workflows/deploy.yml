@@ -1,0 +1,120 @@
+name: Website CI/CD & Deployment Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+    inputs:
+      fetch_from_app_repo:
+        description: 'Fetch latest documentation from pyEGClamUI app repository'
+        required: false
+        type: boolean
+        default: false
+  repository_dispatch:
+    types:
+      - docs_updated
+      - pyegclamui_docs_updated
+      - release_published
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: false
+
+jobs:
+  validate-and-build:
+    name: Verify, Sync & Audit Website
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Website Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # Optional sync step: If triggered via repository_dispatch or manual flag
+      - name: Fetch Latest Docs from App Repository
+        if: ${{ github.event_name == 'repository_dispatch' || (github.event_name == 'workflow_dispatch' && inputs.fetch_from_app_repo == true) }}
+        continue-on-error: true
+        run: |
+          echo "Attempting to fetch latest documentation from EG1DOTIN/pyEGClamUI..."
+          git clone --depth 1 https://github.com/EG1DOTIN/pyEGClamUI.git temp_app_repo || {
+            echo "::warning ::Could not clone EG1DOTIN/pyEGClamUI (repository may be empty or private). Proceeding with local docs."
+            exit 0
+          }
+
+          if [ -d "temp_app_repo/docs" ]; then
+            echo "Syncing docs/ directory into pyEGClamUI-Docs/docs/..."
+            mkdir -p pyEGClamUI-Docs/docs
+            cp -r temp_app_repo/docs/* pyEGClamUI-Docs/docs/
+          fi
+
+          if [ -f "temp_app_repo/README.md" ]; then
+            echo "Syncing README.md into pyEGClamUI-Docs/README.md..."
+            cp temp_app_repo/README.md pyEGClamUI-Docs/README.md
+          fi
+
+          rm -rf temp_app_repo
+          echo "App repository documentation fetch completed."
+
+      - name: 1. Synchronize Site Config & Header/Footer Partials
+        run: |
+          python automation-scripts/sync_site_config.py
+
+      - name: 2. Compile Documentation Data Store (docs-data.js)
+        run: |
+          python automation-scripts/build_docs_data.py
+
+      - name: 3. Audit Website Links & Asset References (Zero Broken Links Gate)
+        run: |
+          python automation-scripts/audit_website_links.py
+
+      - name: Commit and Push Synchronized Files
+        if: ${{ github.event_name != 'pull_request' }}
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          
+          # Stage synced files, HTML pages, and docs bundle
+          git add site-config.json assets/js/docs-data.js pyEGClamUI-Docs/ *.html
+          
+          if git diff --staged --quiet; then
+            echo "All site configs, components, and documentation stores are already up to date."
+          else
+            git commit -m "chore(ci): auto-sync site config, partials, and docs bundle [skip ci]"
+            git push
+            echo "Successfully pushed auto-synced files to repository."
+          fi
+
+      - name: Upload Pages Artifact
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: validate-and-build
+    if: ${{ github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') }}
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

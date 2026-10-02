@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UI Preview - pyEGClamUI Desktop Interface Prototype</title>
+
+  <meta name="title" content="UI Preview - pyEGClamUI Desktop Interface Prototype">
+  <meta name="description"
+    content="Explore the pyEGClamUI desktop interface design directly in your browser. Inspect the status dashboard, 4 scan modes, quarantine vault, and settings.">
+  <meta name="keywords"
+    content="pyEGClamUI UI preview, clamav gui prototype, desktop interface preview, open source desktop antivirus layout">
+  <link rel="icon" type="image/x-icon" href="assets/images/egav.ico">
+  <link rel="icon" type="image/svg+xml" href="assets/images/egav.svg">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://av.eg1.in/ui-preview.html">
+  <meta property="og:title" content="UI Preview - pyEGClamUI Desktop Interface Prototype">
+  <meta property="og:description"
+    content="Explore the pyEGClamUI desktop interface design directly in your browser. Inspect the status dashboard, 4 scan modes, quarantine vault, and settings.">
+  <meta property="og:image" content="https://av.eg1.in/assets/images/og-preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="pyEGClamUI Desktop Interface Preview">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="UI Preview - pyEGClamUI Desktop Interface Prototype">
+  <meta name="twitter:description"
+    content="Explore the pyEGClamUI desktop interface design directly in your browser. Inspect the status dashboard, 4 scan modes, quarantine vault, and settings.">
+  <meta name="twitter:image" content="https://av.eg1.in/assets/images/twitter-card.png">
+
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/desktop-preview.css">
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <!-- template:header -->
+<header class="site-header">
+    <div class="container">
+      <nav class="navbar" aria-label="Main Navigation">
+        <a href="index.html" class="brand-link" aria-label="pyEGClamUI Home">
+          <img src="assets/images/egav.svg" alt="pyEGClamUI Official Logo" class="brand-logo-img" width="32" height="32">
+          <span class="brand-name">pyEGClam<span class="brand-accent">UI</span></span>
+        </a>
+
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="documentation.html" class="nav-link">Docs</a></li>
+          <li><a href="ui-preview.html" class="nav-link active">UI Preview</a></li>
+          <li><a href="download.html" class="nav-link">Download</a></li>
+          <li><a href="getting-started.html" class="nav-link">Getting Started</a></li>
+          <li><a href="about.html" class="nav-link">About &amp; FAQ</a></li>
+
+          <!-- Mobile Nav Actions (Visible on Small Screens) -->
+          <li class="nav-actions-mobile">
+            <a href="https://github.com/EG1DOTIN/pyEGClamUI" target="_blank" rel="noopener noreferrer"
+              class="btn btn-secondary btn-sm" style="width: 100%;" data-config="githubRepo">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+              </svg>
+              GitHub Repository
+            </a>
+          </li>
+        </ul>
+
+        <div class="nav-actions">
+          <!-- Notification Bell Dropdown -->
+          <div class="notification-wrapper">
+            <button class="notification-bell-btn" id="notificationBellBtn" type="button" aria-label="Recent updates"
+              aria-haspopup="dialog" aria-expanded="false">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+              </svg>
+              <span class="notification-dot" id="notificationDot" aria-hidden="true"></span>
+            </button>
+            <div class="notification-dropdown" id="notificationDropdown" role="dialog" aria-label="Recent Updates" hidden>
+              <div class="notification-dropdown-header">
+                <div class="notification-dropdown-title">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                  </svg>
+                  <span>Recent Updates</span>
+                  <span class="badge badge-emerald" id="notificationBadge" style="font-size: 0.65rem; padding: 2px 6px;">New</span>
+                </div>
+                <button class="notification-close-btn" id="notificationCloseBtn" type="button" aria-label="Close notification panel">&times;</button>
+              </div>
+              <div class="notification-list" id="notificationList" tabindex="0">
+                <div class="notification-loading">Loading updates...</div>
+              </div>
+              <div class="notification-dropdown-footer">
+                <a href="updates.html" class="notification-view-all">All Updates &amp; Release History &rarr;</a>
+              </div>
+            </div>
+          </div>
+
+          <a href="https://github.com/EG1DOTIN/pyEGClamUI" target="_blank" rel="noopener noreferrer"
+            class="btn btn-secondary btn-sm" aria-label="GitHub Repository" data-config="githubRepo">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+            </svg>
+            GitHub
+          </a>
+        </div>
+
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+  <!-- /template:header -->
+
+  <main>
+    <!-- Header Hero -->
+    <section class="section" style="padding-bottom: var(--space-6);">
+      <div class="container container-narrow" style="text-align: center;">
+        <div class="section-tag">Interactive Preview</div>
+        <h1 class="hero-title" style="font-size: var(--text-3xl);">Desktop Interface Preview</h1>
+        <p class="hero-subtitle">
+          Explore the desktop interface layout directly in your browser. Click through the tabs below to view the status
+          dashboard, scan options, quarantine vault, and settings.
+        </p>
+      </div>
+    </section>
+
+    <!-- Interactive Desktop Showcase Section -->
+    <section class="section" style="padding-top: 0; padding-bottom: var(--space-12);">
+      <div class="container">
+
+        <!-- Top Toolbar: State Matrix Switcher -->
+        <div class="preview-toolbar">
+          <div class="title-badge">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" />
+            </svg>
+            <span>Interactive Prototype Controls</span>
+          </div>
+
+          <div class="controls">
+            <span style="color: var(--app-text-secondary); font-size: 12px; margin-right: 4px;">Simulate Status:</span>
+            <button class="toolbar-btn active" id="btn-state-protected" onclick="setAppStatusState('protected')">🟢
+              Protected</button>
+            <button class="toolbar-btn" id="btn-state-warning" onclick="setAppStatusState('warning')">🟡 At
+              Risk</button>
+            <button class="toolbar-btn" id="btn-state-danger" onclick="setAppStatusState('danger')">🔴 Engine
+              Offline</button>
+            <button class="toolbar-btn" onclick="openScanModal('Quick Scan')">⚡ Preview Scan Dialog</button>
+          </div>
+        </div>
+
+        <!-- Full Desktop Window Container -->
+        <div class="desktop-window-wrapper">
+          <div class="desktop-window" id="mainWindow">
+
+            <!-- Native Windows Titlebar -->
+            <div class="window-titlebar">
+              <div class="window-title">
+                <img src="assets/images/egav.svg" alt="pyEGClamUI Logo" width="18" height="18">
+                <span id="desktopWindowTitle">pyEGClamUI - Status</span>
+              </div>
+
+              <div class="window-controls">
+                <div class="win-btn" title="Minimize">
+                  <svg width="10" height="10" viewBox="0 0 10 1">
+                    <rect width="10" height="1" fill="currentColor" />
+                  </svg>
+                </div>
+                <div class="win-btn" title="Maximize">
+                  <svg width="10" height="10" viewBox="0 0 10 10">
+                    <path d="M0,0v10h10V0H0z M9,9H1V1h8V9z" fill="currentColor" />
+                  </svg>
+                </div>
+                <div class="win-btn close" title="Close">
+                  <svg width="10" height="10" viewBox="0 0 10 10">
+                    <path d="M1,0L0,1l4,4L0,9l1,1l4-4l4,4l1-1L6,5l4-4L9,0L5,4L1,0z" fill="currentColor" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Window Body with QTabWidget -->
+            <div class="window-body">
+
+              <!-- Tab Bar Header -->
+              <nav class="tab-header" role="tablist">
+                <button class="tab-btn active" role="tab" aria-selected="true" onclick="switchAppTab(0, this)">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" />
+                  </svg>
+                  Status
+                </button>
+                <button class="tab-btn" role="tab" aria-selected="false" onclick="switchAppTab(1, this)">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7 2v2h1v14a4 4 0 0 0 4 4 4 4 0 0 0 4-4V4h1V2H7zm4 13.5V5h2v10.5a2 2 0 1 1-2 0z" />
+                  </svg>
+                  Scan
+                </button>
+                <button class="tab-btn" role="tab" aria-selected="false" onclick="switchAppTab(2, this)">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 4h-3.5l-1-1h-5l-1 1H5v2h14M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6v12z" />
+                  </svg>
+                  Quarantine
+                </button>
+                <button class="tab-btn" role="tab" aria-selected="false" onclick="switchAppTab(3, this)">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                      d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" />
+                  </svg>
+                  Settings
+                </button>
+                <button class="tab-btn" role="tab" aria-selected="false" onclick="switchAppTab(4, this)">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+                  </svg>
+                  About
+                </button>
+              </nav>
+
+              <!-- TAB PANE 0: STATUS -->
+              <section class="tab-pane active" id="pane-status" role="tabpanel">
+                <div class="tab-status-content custom-scroll">
+
+                  <!-- 3-Tier Status Banner -->
+                  <div class="banner-card protected" id="statusBanner">
+                    <div class="banner-left">
+                      <svg class="banner-icon" id="bannerShieldIcon" viewBox="0 0 64 64" fill="none">
+                        <path id="shieldPath" d="M32 6 L52 14 V34 C52 48 32 58 32 58 C32 58 12 48 12 34 V14 Z"
+                          fill="rgba(34, 197, 94, 0.12)" stroke="#22c55e" stroke-width="3" stroke-linecap="round"
+                          stroke-linejoin="round" />
+                        <path id="shieldCheckmark" d="M22 32 L29 39 L43 25" stroke="#22c55e" stroke-width="4"
+                          stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                      <div>
+                        <div class="banner-title" id="bannerTitle">System Protected</div>
+                        <div class="banner-sub" id="bannerSubtitle">Real-time protection is active. Virus signatures are
+                          up-to-date.</div>
+                      </div>
+                    </div>
+
+                    <button class="app-btn app-btn-primary" id="bannerActionBtn">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" />
+                      </svg>
+                      <span id="bannerBtnText">Check for Updates</span>
+                    </button>
+                  </div>
+
+                  <!-- Engine & Signature Details -->
+                  <div class="group-box">
+                    <span class="group-box-title">ClamAV Engine &amp; Signature Details</span>
+                    <div class="engine-info-list">
+                      <div class="engine-info-item">
+                        <span class="label">Engine Version:</span>
+                        <span class="val">ClamAV 1.4.1 (x64)</span>
+                        <span class="engine-badge" id="badgeEngine">● Online</span>
+                      </div>
+                      <div class="engine-info-item">
+                        <span class="label">Signature Database:</span>
+                        <span class="val">Up-to-date (Daily: 28,130, Main: 62, Bytecode: 335)</span>
+                        <span class="engine-badge">● Fresh</span>
+                      </div>
+                      <div class="engine-info-item">
+                        <span class="label">Clamd Daemon Socket:</span>
+                        <span class="val">Connected (Local Socket Daemon - Active)</span>
+                        <span class="engine-badge">⚡ Accelerated</span>
+                      </div>
+                      <div class="engine-info-item">
+                        <span class="label">Smart 2-Folder Guard:</span>
+                        <span class="val">Active (Downloads &amp; Desktop surveillance)</span>
+                        <span class="engine-badge">🛡️ Debounced (1.5s)</span>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </section>
+
+              <!-- TAB PANE 1: SCAN -->
+              <section class="tab-pane" id="pane-scan" role="tabpanel">
+                <div class="tab-scan-content custom-scroll">
+                  <div class="scan-header">
+                    <h2>Select Scan Method</h2>
+                    <p>Choose the inspection depth that matches your needs. All scans run asynchronously without
+                      freezing the app.</p>
+                  </div>
+
+                  <div class="scan-cards-grid">
+                    <!-- Card 1: Quick Scan -->
+                    <div class="scan-card">
+                      <svg class="scan-card-icon" viewBox="0 0 64 64" fill="none">
+                        <path d="M33 7 L17 33 H31 L26 56 L49 28 H35 Z" fill="#38bdf8" />
+                      </svg>
+                      <div class="scan-card-title">Quick Scan</div>
+                      <div class="scan-card-desc">
+                        Fast, lightweight check of high-priority system areas in under a minute.
+                      </div>
+                      <button class="app-btn app-btn-primary" onclick="openScanModal('Quick Scan')">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                          stroke-width="2.5">
+                          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                        </svg>
+                        Run Quick Scan
+                      </button>
+                    </div>
+
+                    <!-- Card 2: Full System Scan -->
+                    <div class="scan-card">
+                      <svg class="scan-card-icon" viewBox="0 0 64 64" fill="none" stroke="#38bdf8" stroke-width="2.5">
+                        <rect x="13" y="11" width="38" height="11" rx="3" />
+                        <circle cx="45" cy="16.5" r="1.5" fill="#38bdf8" />
+                        <rect x="13" y="26" width="38" height="11" rx="3" />
+                        <circle cx="45" cy="31.5" r="1.5" fill="#38bdf8" />
+                        <rect x="13" y="41" width="38" height="11" rx="3" />
+                        <circle cx="45" cy="46.5" r="1.5" fill="#38bdf8" />
+                      </svg>
+                      <div class="scan-card-title">Full System Scan</div>
+                      <div class="scan-card-desc">
+                        Comprehensive deep scan across your entire computer for total protection.
+                      </div>
+                      <button class="app-btn app-btn-primary" onclick="openScanModal('Full System Scan')">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                          stroke-width="2">
+                          <ellipse cx="12" cy="5" rx="9" ry="3" />
+                          <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
+                          <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+                        </svg>
+                        Run Full Scan
+                      </button>
+                    </div>
+
+                    <!-- Card 3: Custom Scan -->
+                    <div class="scan-card">
+                      <svg class="scan-card-icon" viewBox="0 0 64 64" fill="none" stroke="#38bdf8" stroke-width="2.5">
+                        <path d="M12 20 H26 L31 25 H51 V46 H12 Z" stroke-linejoin="round" />
+                        <circle cx="38" cy="35" r="9" />
+                        <line x1="45" y1="42" x2="53" y2="50" stroke-linecap="round" />
+                      </svg>
+                      <div class="scan-card-title">Custom Scan</div>
+                      <div class="scan-card-desc">
+                        Target specific files, folders, or external drives of your choice.
+                      </div>
+                      <button class="app-btn app-btn-primary" onclick="openScanModal('Custom Scan')">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                          stroke-width="2">
+                          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+                          <circle cx="12" cy="13" r="3" />
+                        </svg>
+                        Select &amp; Scan
+                      </button>
+                    </div>
+
+                    <!-- Card 4: Memory Scan -->
+                    <div class="scan-card">
+                      <svg class="scan-card-icon" viewBox="0 0 64 64" fill="none" stroke="#38bdf8" stroke-width="2.5">
+                        <rect x="18" y="18" width="28" height="28" rx="4" />
+                        <circle cx="32" cy="32" r="3" fill="#38bdf8" />
+                        <line x1="24" y1="18" x2="24" y2="10" />
+                        <line x1="32" y1="18" x2="32" y2="10" />
+                        <line x1="40" y1="18" x2="40" y2="10" />
+                        <line x1="24" y1="46" x2="24" y2="54" />
+                        <line x1="32" y1="46" x2="32" y2="54" />
+                        <line x1="40" y1="46" x2="40" y2="54" />
+                        <line x1="18" y1="24" x2="10" y2="24" />
+                        <line x1="18" y1="32" x2="10" y2="32" />
+                        <line x1="18" y1="40" x2="10" y2="40" />
+                        <line x1="46" y1="24" x2="54" y2="24" />
+                        <line x1="46" y1="32" x2="54" y2="32" />
+                        <line x1="46" y1="40" x2="54" y2="40" />
+                      </svg>
+                      <div class="scan-card-title">Memory Scan</div>
+                      <div class="scan-card-desc">
+                        Detects hidden, active threats currently running in system memory.
+                      </div>
+                      <button class="app-btn app-btn-primary" onclick="openScanModal('Memory Scan')">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                          stroke-width="2">
+                          <rect x="4" y="4" width="16" height="16" rx="2" />
+                          <rect x="9" y="9" width="6" height="6" />
+                          <line x1="9" y1="1" x2="9" y2="4" />
+                          <line x1="15" y1="1" x2="15" y2="4" />
+                          <line x1="9" y1="20" x2="9" y2="23" />
+                          <line x1="15" y1="20" x2="15" y2="23" />
+                        </svg>
+                        Scan Memory
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <!-- TAB PANE 2: QUARANTINE -->
+              <section class="tab-pane" id="pane-quarantine" role="tabpanel">
+                <div class="tab-quarantine-content custom-scroll">
+                  <div class="quarantine-header">
+                    <h2>Isolated Threats Vault</h2>
+                    <span class="badge-count">2 Items in Vault</span>
+                  </div>
+
+                  <div class="table-container">
+                    <table class="q-table" id="quarantineTable">
+                      <thead>
+                        <tr>
+                          <th>Date Quarantined</th>
+                          <th>Threat Classification</th>
+                          <th>Original Path</th>
+                          <th>SHA-256 Fingerprint</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr class="selected" onclick="selectQuarantineRow(this)">
+                          <td>2026-09-24 14:10</td>
+                          <td class="threat-tag">Win.Test.EICAR_HDB-1</td>
+                          <td>Downloads/eicar.com</td>
+                          <td><code>44d88612fea8a8f36de82e1278abb02f3d98d8cb...</code></td>
+                        </tr>
+                        <tr onclick="selectQuarantineRow(this)">
+                          <td>2026-09-23 18:42</td>
+                          <td class="threat-tag">Trojan.Agent.Suspicious</td>
+                          <td>Desktop/unknown_setup.exe</td>
+                          <td><code>8f434346648f6b96df89dda901c5176b10a6d839...</code></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div class="quarantine-actions">
+                    <div style="font-size: 12px; color: var(--app-text-secondary);">
+                      Detected threats are moved to an isolated vault to prevent accidental execution.
+                    </div>
+                    <div class="action-right">
+                      <button class="app-btn app-btn-success">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                          stroke-width="2.5">
+                          <polyline points="1 4 1 10 7 10"></polyline>
+                          <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                        </svg>
+                        Restore File
+                      </button>
+                      <button class="app-btn app-btn-danger">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                          stroke-width="2.5">
+                          <polyline points="3 6 5 6 21 6"></polyline>
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                          </path>
+                        </svg>
+                        Delete Permanently
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <!-- TAB PANE 3: SETTINGS -->
+              <section class="tab-pane" id="pane-settings" role="tabpanel">
+                <div class="tab-settings-container">
+                  <div class="settings-scroll-area custom-scroll">
+                    <div class="settings-grid">
+
+                      <!-- Col 1: Real-Time Guard & Folders -->
+                      <div class="group-box">
+                        <span class="group-box-title">Real-Time Folder Guard</span>
+                        <label class="form-check" style="margin-top: 6px; font-weight: 600;">
+                          <input type="checkbox" checked>
+                          <span>Enable Folder Guard</span>
+                        </label>
+                        <p style="font-size: 11.5px; color: var(--app-text-secondary); margin-bottom: 12px;">
+                          Monitors up to two selected folders for new or modified files. Defaults to Downloads and
+                          Desktop (customizable).
+                        </p>
+
+                        <div style="margin-bottom: 8px;">
+                          <div style="font-size: 12px; color: var(--app-text-secondary); margin-bottom: 4px;">Guarded
+                            Folder 1 (Default: Downloads):</div>
+                          <input type="text" class="input-text" value="Downloads (Default Guard)" readonly>
+                        </div>
+
+                        <div>
+                          <div style="font-size: 12px; color: var(--app-text-secondary); margin-bottom: 4px;">Guarded
+                            Folder 2 (Default: Desktop):</div>
+                          <input type="text" class="input-text" value="Desktop (Default Guard)" readonly>
+                        </div>
+                      </div>
+
+                      <!-- Col 2: Privacy & Telemetry -->
+                      <div class="group-box">
+                        <span class="group-box-title">Privacy &amp; Diagnostics (100% Opt-In)</span>
+                        <label class="form-check" style="margin-top: 6px; font-weight: 600;">
+                          <input type="checkbox" onchange="toggleTelemetrySub(this.checked)">
+                          <span>Send Anonymous Diagnostics (Disabled by default)</span>
+                        </label>
+                        <p style="font-size: 11.5px; color: var(--app-text-secondary); margin-bottom: 10px;">
+                          Strictly offline-first. When reporting GitHub issues, the application automatically strips and
+                          masks personal user directories (e.g. personal username folders are masked as <code>~</code>).
+                        </p>
+
+                        <div class="sub-options-box" id="telemSubWidget" style="opacity: 0.5;">
+                          <label class="form-check"><input type="checkbox" disabled checked> ClamAV Engine Version &amp;
+                            Platform OS</label>
+                          <label class="form-check"><input type="checkbox" disabled checked> General Scan Counts &amp;
+                            Threat Totals</label>
+                          <label class="form-check"><input type="checkbox" disabled> Crash Traceback Logs
+                            (Path-Redacted)</label>
+                        </div>
+
+                        <button class="app-btn" style="width: 100%; font-size: 12px;">Preview Exact JSON
+                          Payload</button>
+                      </div>
+
+                    </div>
+                  </div>
+
+                  <div class="settings-bottom-bar">
+                    <span style="font-size: 12px; color: var(--app-text-secondary);">Configuration stored securely on
+                      your local device &bull; Offline-first</span>
+                    <button class="app-btn app-btn-primary">Save Changes</button>
+                  </div>
+                </div>
+              </section>
+
+              <!-- TAB PANE 4: ABOUT -->
+              <section class="tab-pane" id="pane-about" role="tabpanel">
+                <div class="tab-about-content custom-scroll">
+                  <div class="about-title"><span class="product-name">pyEGClamUI</span></div>
+                  <div class="about-version">Version 3.0.0 &bull; Open Source Security</div>
+                  <p class="about-desc">
+                    An open-source, cross-platform desktop graphical user interface for the ClamAV antivirus
+                    engine. Built with Python 3.9+ and PySide6 (Qt) under the GNU General Public License v3.0 (GPL-3.0).
+                  </p>
+
+                  <div class="disclaimer-card">
+                    <strong>ClamAV® Trademark Notice:</strong> ClamAV® is a registered trademark of Cisco Systems, Inc.
+                    <span class="product-name">pyEGClamUI</span> is an independent open-source project and is not
+                    affiliated with, endorsed by, or sponsored by Cisco Systems, Inc.
+                  </div>
+                </div>
+              </section>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Live Scan Dialog Modal Simulation -->
+  <div class="modal-overlay" id="scanModal">
+    <div class="modal-box">
+      <!-- Modal Titlebar -->
+      <div class="window-titlebar">
+        <div class="window-title">
+          <img src="assets/images/egav.svg" alt="pyEGClamUI Logo" width="16" height="16">
+          <span id="modalWindowSubtitle">pyEGClamUI - Active Scan</span>
+        </div>
+        <div class="window-controls">
+          <div class="win-btn close" onclick="closeScanModal()" title="Close">
+            <svg width="10" height="10" viewBox="0 0 10 10">
+              <path d="M1,0L0,1l4,4L0,9l1,1l4-4l4,4l1-1L6,5l4-4L9,0L5,4L1,0z" fill="currentColor" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Body -->
+      <div style="padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+        <div>
+          <h3 id="modalScanHeader"
+            style="font-size: 16px; font-weight: 700; color: var(--app-accent-sky); margin-bottom: 2px;">Running Quick
+            Scan...</h3>
+          <p id="modalScanSubheader" style="font-size: 12px; color: var(--app-text-secondary);">Target: High-Priority
+            System Areas</p>
+        </div>
+
+        <!-- Indeterminate Progress Bar -->
+        <div class="progress-bar-container">
+          <div class="progress-bar-indeterminate"></div>
+        </div>
+
+        <!-- Live Path Ticker -->
+        <div
+          style="font-size: 12px; font-family: monospace; color: var(--app-text-secondary); background: var(--app-bg-card); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--app-border-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+          Scanning: <span style="color: #f8fafc;" id="liveTickerPath">System/ApplicationData/runtime_cache.bin</span>
+        </div>
+
+        <!-- Counters Row -->
+        <div class="stats-card-row">
+          <div class="stats-card-item">Scanned Files: <span style="color: var(--app-accent-sky);"
+              id="scannedFilesCounter">1,482</span></div>
+          <div class="stats-card-item" style="color: var(--app-accent-green);" id="modalThreatsCounter">Threats: 0</div>
+          <div class="stats-card-item" style="color: var(--app-text-secondary);" id="modalElapsedCounter">Elapsed: 12s
+          </div>
+        </div>
+
+        <!-- Modal Action Buttons -->
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 6px;">
+          <button class="app-btn app-btn-danger" onclick="closeScanModal()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+            Stop Scan
+          </button>
+          <button class="app-btn" onclick="closeScanModal()">Close Dialog</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <!-- template:footer -->
+<footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="brand-link" style="margin-bottom: 0.5rem;">
+            <img src="assets/images/egav.svg" alt="pyEGClamUI" class="brand-logo-img" width="24" height="24">
+            <span class="brand-name">pyEGClam<span class="brand-accent">UI</span></span>
+          </div>
+          <p class="footer-brand-desc">
+            An open-source, cross-platform desktop graphical user interface for the ClamAV antivirus engine.
+          </p>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Navigation</div>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="documentation.html">Docs</a></li>
+            <li><a href="documentation.html#features">Features</a></li>
+            <li><a href="ui-preview.html">UI Preview</a></li>
+            <li><a href="download.html">Download</a></li>
+            <li><a href="getting-started.html">Getting Started</a></li>
+            <li><a href="updates.html">Updates</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Resources</div>
+          <ul class="footer-links">
+            <li><a href="about.html">About &amp; FAQ</a></li>
+            <li><a href="updates.html">Release History</a></li>
+            <li><a href="https://github.com/EG1DOTIN/pyEGClamUI" target="_blank" rel="noopener noreferrer"
+                data-config="githubRepo">GitHub Repository</a></li>
+            <li><a href="https://github.com/EG1DOTIN/pyEGClamUI/issues" target="_blank" rel="noopener noreferrer"
+                data-config="githubIssues">GitHub Issues</a></li>
+            <li><a href="https://github.com/EG1DOTIN/pyEGClamUI/releases" target="_blank" rel="noopener noreferrer"
+                data-config="githubReleases">Releases</a></li>
+            <li><a href="https://www.clamav.net/" target="_blank" rel="noopener noreferrer">ClamAV Official</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Organization</div>
+          <ul class="footer-links">
+            <li><a href="https://eg1.in" target="_blank" rel="noopener noreferrer" data-config="officialSite">EG1 (eg1.in)</a></li>
+            <li><a href="https://www.eg1.in/contact" target="_blank" rel="noopener noreferrer"
+                data-config="contactUrl">Contact EG1</a></li>
+            <li><a href="https://eg1.in/privacypolicy.html" target="_blank" rel="noopener noreferrer"
+                data-config="privacyPolicy">Privacy Policy</a></li>
+            <li><a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener noreferrer">GPL-3.0
+                License</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p class="trademark-notice">
+          <strong>Trademark Disclaimer:</strong> ClamAV® is a registered trademark of Cisco Systems, Inc. <span
+            class="product-name">pyEGClamUI</span> is an independent open-source project and is not affiliated with,
+          endorsed by, or sponsored by Cisco Systems, Inc.
+        </p>
+        <div class="footer-copyright">
+          &copy; 2026 <a href="https://eg1.in" target="_blank" rel="noopener noreferrer">EG1 (eg1.in)</a>.
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- /template:footer -->
+
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/desktop-preview.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,51 @@
+# pyEGClamUI Website - .gitignore
+
+# Workspace & Agent Tooling
+.agents/
+.vscode/
+
+# Archived files 
+.unused-old-files/
+
+#ignored files
+gitignore/
+
+# Secrets, Environment & Security Credentials
+*.env
+.env.*
+*.pem
+*.key
+*.cert
+*.pfx
+
+# Python & Environment Artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+ENV/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Deployment & Build Logs
+.firebase/
+firebase-debug.log*
+firestore-debug.log*
+npm-debug.log*
+yarn-error.log*
+*.log
+
+# Temporary & Editor Artifacts
+*.tmp
+*.bak
+*.swp
+*~
+pyrightconfig.json
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+desktop.ini

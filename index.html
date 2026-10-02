@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>pyEGClamUI - Desktop GUI for ClamAV</title>
+
+  <meta name="title" content="pyEGClamUI - Desktop GUI for ClamAV">
+  <meta name="description"
+    content="An open-source graphical user interface for the ClamAV antivirus engine. Real-time folder guard, memory scanning, safe quarantine vault, and zero silent tracking.">
+  <meta name="keywords"
+    content="pyEGClamUI, ClamAV GUI, ClamAV Windows, ClamAV Linux, ClamAV macOS, open source antivirus, antivirus GUI, desktop antivirus, real-time clamav, EG1">
+  <meta name="author" content="EG1">
+  <link rel="icon" type="image/x-icon" href="assets/images/egav.ico">
+  <link rel="icon" type="image/svg+xml" href="assets/images/egav.svg">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://av.eg1.in/">
+  <meta property="og:title" content="pyEGClamUI - Desktop GUI for ClamAV">
+  <meta property="og:description"
+    content="An open-source, cross-platform desktop GUI for ClamAV. Smart 2-folder real-time guard, safe quarantine vault, memory scanning, and transparent opt-in privacy.">
+  <meta property="og:image" content="https://av.eg1.in/assets/images/og-preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="pyEGClamUI - Desktop GUI & Real-Time Defense Manager for ClamAV">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="pyEGClamUI - Desktop GUI for ClamAV">
+  <meta name="twitter:description"
+    content="An open-source, cross-platform desktop GUI for ClamAV. Smart 2-folder real-time guard, safe quarantine vault, memory scanning, and transparent opt-in privacy.">
+  <meta name="twitter:image" content="https://av.eg1.in/assets/images/twitter-card.png">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="assets/css/style.css">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "pyEGClamUI",
+    "operatingSystem": "Windows 10/11, Linux, macOS",
+    "applicationCategory": "SecurityApplication",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "description": "An open-source, cross-platform desktop graphical user interface for the ClamAV antivirus engine.",
+    "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+    "author": {
+      "@type": "Organization",
+      "name": "EG1",
+      "url": "https://eg1.in"
+    }
+  }
+  </script>
+</head>
+
+<body>
+
+  <!-- ========================================================================
+       Site Navigation
+       ======================================================================== -->
+  <!-- template:header -->
+<header class="site-header">
+    <div class="container">
+      <nav class="navbar" aria-label="Main Navigation">
+        <a href="index.html" class="brand-link" aria-label="pyEGClamUI Home">
+          <img src="assets/images/egav.svg" alt="pyEGClamUI Official Logo" class="brand-logo-img" width="32" height="32">
+          <span class="brand-name">pyEGClam<span class="brand-accent">UI</span></span>
+        </a>
+
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="index.html" class="nav-link active">Home</a></li>
+          <li><a href="documentation.html" class="nav-link">Docs</a></li>
+          <li><a href="ui-preview.html" class="nav-link">UI Preview</a></li>
+          <li><a href="download.html" class="nav-link">Download</a></li>
+          <li><a href="getting-started.html" class="nav-link">Getting Started</a></li>
+          <li><a href="about.html" class="nav-link">About &amp; FAQ</a></li>
+
+          <!-- Mobile Nav Actions (Visible on Small Screens) -->
+          <li class="nav-actions-mobile">
+            <a href="https://github.com/EG1DOTIN/pyEGClamUI" target="_blank" rel="noopener noreferrer"
+              class="btn btn-secondary btn-sm" style="width: 100%;" data-config="githubRepo">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+              </svg>
+              GitHub Repository
+            </a>
+          </li>
+        </ul>
+
+        <div class="nav-actions">
+          <!-- Notification Bell Dropdown -->
+          <div class="notification-wrapper">
+            <button class="notification-bell-btn" id="notificationBellBtn" type="button" aria-label="Recent updates"
+              aria-haspopup="dialog" aria-expanded="false">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+              </svg>
+              <span class="notification-dot" id="notificationDot" aria-hidden="true"></span>
+            </button>
+            <div class="notification-dropdown" id="notificationDropdown" role="dialog" aria-label="Recent Updates" hidden>
+              <div class="notification-dropdown-header">
+                <div class="notification-dropdown-title">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                  </svg>
+                  <span>Recent Updates</span>
+                  <span class="badge badge-emerald" id="notificationBadge" style="font-size: 0.65rem; padding: 2px 6px;">New</span>
+                </div>
+                <button class="notification-close-btn" id="notificationCloseBtn" type="button" aria-label="Close notification panel">&times;</button>
+              </div>
+              <div class="notification-list" id="notificationList" tabindex="0">
+                <div class="notification-loading">Loading updates...</div>
+              </div>
+              <div class="notification-dropdown-footer">
+                <a href="updates.html" class="notification-view-all">All Updates &amp; Release History &rarr;</a>
+              </div>
+            </div>
+          </div>
+
+          <a href="https://github.com/EG1DOTIN/pyEGClamUI" target="_blank" rel="noopener noreferrer"
+            class="btn btn-secondary btn-sm" aria-label="GitHub Repository" data-config="githubRepo">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+            </svg>
+            GitHub
+          </a>
+        </div>
+
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+  <!-- /template:header -->
+
+  <!-- ========================================================================
+       Hero Section
+       ======================================================================== -->
+  <main>
+    <section class="hero">
+      <div class="hero-glow-bg" aria-hidden="true"></div>
+      <div class="container hero-content">
+
+        <h1 class="hero-title">
+          Desktop GUI for <span class="highlight">ClamAV</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          An open-source, cross-platform desktop graphical user interface for the ClamAV antivirus engine. Built
+          with Python and PySide6 (Qt) for Windows, Linux, and macOS.
+        </p>
+
+        <div class="hero-actions">
+          <a href="download.html" class="btn btn-primary btn-lg">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Download
+          </a>
+          <a href="ui-preview.html" class="btn btn-secondary btn-lg">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            Explore UI Preview &rarr;
+          </a>
+          <a href="https://github.com/EG1DOTIN/pyEGClamUI" target="_blank" rel="noopener noreferrer"
+            class="btn btn-secondary btn-lg" data-config="githubRepo">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+            </svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         Core Capabilities Grid
+         ======================================================================== -->
+    <section class="section section-subtle">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-tag">Core Capabilities</div>
+          <h2 class="section-title">Visual Control &amp; Core Capabilities</h2>
+          <p class="section-desc">
+            A clean desktop interface connecting you to the ClamAV engine with multiple scan modes,
+            real-time folder monitoring, and quarantine isolation.
+          </p>
+        </div>
+
+        <div class="card-grid">
+          <!-- Card 1: Engine Discovery & Daemon -->
+          <div class="feature-card">
+            <div class="feature-icon-box">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+              </svg>
+            </div>
+            <h3 class="feature-title">Engine Auto-Discovery</h3>
+            <p class="feature-desc">
+              Automatically detects installed ClamAV binaries across standard system paths and communicates directly
+              with the local scanning service for fast performance.
+            </p>
+            <div class="feature-pill-list">
+              <span class="badge badge-muted">Auto-Detection</span>
+              <span class="badge badge-muted">Local Daemon</span>
+              <span class="badge badge-muted">CLI &amp; GUI</span>
+            </div>
+          </div>
+
+          <!-- Card 2: 4 Scan Profiles -->
+          <div class="feature-card">
+            <div class="feature-icon-box">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="22" y1="12" x2="18" y2="12"></line>
+                <line x1="6" y1="12" x2="2" y2="12"></line>
+                <line x1="12" y1="6" x2="12" y2="2"></line>
+                <line x1="12" y1="22" x2="12" y2="18"></line>
+              </svg>
+            </div>
+            <h3 class="feature-title">Four Scan Profiles</h3>
+            <p class="feature-desc">
+              Choose between a Quick Scan of high-priority system areas most prone to infection, a Full System Scan of
+              all drives, Custom drag-and-drop file scanning, or Windows active process memory scanning.
+            </p>
+            <div class="feature-pill-list">
+              <span class="badge badge-muted">Quick &amp; Full Scan</span>
+              <span class="badge badge-muted">Process Memory</span>
+              <span class="badge badge-muted">Drag &amp; Drop</span>
+            </div>
+          </div>
+
+          <!-- Card 3: Real-Time Folder Guard -->
+          <div class="feature-card">
+            <div class="feature-icon-box">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                <path d="M12 11v6"></path>
+                <path d="M9 14l3 3 3-3"></path>
+              </svg>
+            </div>
+            <h3 class="feature-title">Real-Time Folder Guard</h3>
+            <p class="feature-desc">
+              Monitors up to two selected folders in real time (defaults to Downloads and Desktop, customizable in
+              Settings) to inspect new files as they arrive.
+            </p>
+            <div class="feature-pill-list">
+              <span class="badge badge-muted">Up to 2 Folders</span>
+              <span class="badge badge-muted">Custom Paths</span>
+              <span class="badge badge-muted">Background Guard</span>
+            </div>
+          </div>
+
+          <!-- Card 4: Quarantine Management -->
+          <div class="feature-card">
+            <div class="feature-icon-box">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+            </div>
+            <h3 class="feature-title">Quarantine Management</h3>
+            <p class="feature-desc">
+              Detected files are securely moved to an isolated quarantine vault to prevent accidental execution, with
+              options to safely restore or permanently delete them.
+            </p>
+            <div class="feature-pill-list">
+              <span class="badge badge-muted">Safe Vault</span>
+              <span class="badge badge-muted">Review Threats</span>
+              <span class="badge badge-muted">1-Click Restore</span>
+            </div>
+          </div>
+
+          <!-- Card 5: Virus Definition Updates -->
+          <div class="feature-card">
+            <div class="feature-icon-box">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+              </svg>
+            </div>
+            <h3 class="feature-title">Virus Definition Updates</h3>
+            <p class="feature-desc">
+              Check for and download the latest virus signature updates directly through the interface using the
+              official FreshClam utility.
+            </p>
+            <div class="feature-pill-list">
+              <span class="badge badge-muted">FreshClam</span>
+              <span class="badge badge-muted">Status Indicator</span>
+              <span class="badge badge-muted">One-Click Update</span>
+            </div>
+          </div>
+
+          <!-- Card 6: Desktop & Tray Integration -->
+          <div class="feature-card">
+            <div class="feature-icon-box">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                <line x1="8" y1="21" x2="16" y2="21"></line>
+                <line x1="12" y1="17" x2="12" y2="21"></line>
+              </svg>
+            </div>
+            <h3 class="feature-title">Desktop &amp; Tray Integration</h3>
+            <p class="feature-desc">
+              Runs unobtrusively in the background with Windows System Tray, macOS Menu Bar, and Linux application menu
+              integration.
+            </p>
+            <div class="feature-pill-list">
+              <span class="badge badge-muted">System Tray</span>
+              <span class="badge badge-muted">Cross-Platform</span>
+              <span class="badge badge-muted">Offline-First</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         Platform Installation Switcher
+         ======================================================================== -->
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-tag">Bootstrap Installer</div>
+          <h2 class="section-title">Quick Installation</h2>
+          <p class="section-desc">
+            Automated bootstrap setup commands that provision Python, configure an isolated environment, check ClamAV,
+            and set up desktop launchers automatically.
+          </p>
+        </div>
+
+        <div class="platform-tabs">
+          <button class="platform-tab-btn active" data-platform="windows">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801" />
+            </svg>
+            Windows
+          </button>
+          <button class="platform-tab-btn" data-platform="linux">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12.504 0c-.155 0-.315.008-.48.021-4.226.333-3.105 4.807-3.17 6.298-.076 1.092-.3 1.953-1.05 3.02-.885 1.051-2.127 2.75-2.716 4.521-.278.832-.41 1.684-.287 2.489a.424.424 0 00-.11.135c-.26.268-.45.6-.663.839-.199.199-.485.267-.797.4-.313.136-.658.269-.864.68-.09.189-.136.394-.132.602 0 .199.027.4.055.536.058.399.116.728.04.97-.249.68-.28 1.145-.106 1.484.174.334.535.47.94.601.81.2 1.91.135 2.774.6.926.466 1.866.67 2.616.47.526-.116.97-.464 1.208-.946.587-.003 1.23-.269 2.26-.334.699-.058 1.574.267 2.577.2.025.134.063.198.114.333l.003.003c.391.778 1.113 1.132 1.884 1.071.771-.06 1.592-.536 2.257-1.306.631-.765 1.683-1.084 2.378-1.503.348-.199.629-.469.649-.853.023-.4-.2-.811-.714-1.376v-.097l-.003-.003c-.17-.2-.25-.535-.338-.926-.085-.401-.182-.786-.492-1.046h-.003c-.059-.054-.123-.067-.188-.135a.357.357 0 00-.19-.064c.431-1.278.264-2.55-.173-3.694-.533-1.41-1.465-2.638-2.175-3.483-.796-1.005-1.576-1.957-1.56-3.368.026-2.152.236-6.133-3.544-6.139zm.529 3.405h.013c.213 0 .396.062.584.198.19.135.33.332.438.533.105.259.158.459.166.724 0-.02.006-.04.006-.06v.105a.086.086 0 01-.004-.021l-.004-.024a1.807 1.807 0 01-.15.706.953.953 0 01-.213.335.71.71 0 00-.088-.042c-.104-.045-.198-.064-.284-.133a1.312 1.312 0 00-.22-.066c.05-.06.146-.133.183-.198.053-.128.082-.264.088-.402v-.02a1.21 1.21 0 00-.061-.4c-.045-.134-.101-.2-.183-.333-.084-.066-.167-.132-.267-.132h-.016c-.093 0-.176.03-.262.132a.8.8 0 00-.205.334 1.18 1.18 0 00-.09.4v.019c.002.089.008.179.02.267-.193-.067-.438-.135-.607-.202a1.635 1.635 0 01-.018-.2v-.02a1.772 1.772 0 01.15-.768c.082-.22.232-.406.43-.533a.985.985 0 01.594-.2zm-2.962.059h.036c.142 0 .27.048.399.135.146.129.264.288.344.465.09.199.14.4.153.667v.004c.007.134.006.2-.002.266v.08c-.03.007-.056.018-.083.024-.152.055-.274.135-.393.2.012-.09.013-.18.003-.267v-.015c-.012-.133-.04-.2-.082-.333a.613.613 0 00-.166-.267.248.248 0 00-.183-.064h-.021c-.071.006-.13.04-.186.132a.552.552 0 00-.12.27.944.944 0 00-.023.33v.015c.012.135.037.2.08.334.046.134.098.2.166.268.01.009.02.018.034.024-.07.057-.117.07-.176.136a.304.304 0 01-.131.068 2.62 2.62 0 01-.275-.402 1.772 1.772 0 01-.155-.667 1.759 1.759 0 01.08-.668 1.43 1.43 0 01.283-.535c.128-.133.26-.2.418-.2zm1.37 1.706c.332 0 .733.065 1.216.399.293.2.523.269 1.052.468h.003c.255.136.405.266.478.399v-.131a.571.571 0 01.016.47c-.123.31-.516.643-1.063.842v.002c-.268.135-.501.333-.775.465-.276.135-.588.292-1.012.267a1.139 1.139 0 01-.448-.067 3.566 3.566 0 01-.322-.198c-.195-.135-.363-.332-.612-.465v-.005h-.005c-.4-.246-.616-.512-.686-.71-.07-.268-.005-.47.193-.6.224-.135.38-.271.483-.336.104-.074.143-.102.176-.131h.002v-.003c.169-.202.436-.47.839-.601.139-.036.294-.065.466-.065zm2.8 2.142c.358 1.417 1.196 3.475 1.735 4.473.286.534.855 1.659 1.102 3.024.156-.005.33.018.513.064.646-1.671-.546-3.467-1.089-3.966-.22-.2-.232-.335-.123-.335.59.534 1.365 1.572 1.646 2.757.13.535.16 1.104.021 1.67.067.028.135.06.205.067 1.032.534 1.413.938 1.23 1.537v-.043c-.06-.003-.12 0-.18 0h-.016c.151-.467-.182-.825-1.065-1.224-.915-.4-1.646-.336-1.77.465-.008.043-.013.066-.018.135-.068.023-.139.053-.209.064-.43.268-.662.669-.793 1.187-.13.533-.17 1.156-.205 1.869v.003c-.02.334-.17.838-.319 1.35-1.5 1.072-3.58 1.538-5.348.334a2.645 2.645 0 00-.402-.533 1.45 1.45 0 00-.275-.333c.182 0 .338-.03.465-.067a.615.615 0 00.314-.334c.108-.267 0-.697-.345-1.163-.345-.467-.931-.995-1.788-1.521-.63-.4-.986-.87-1.15-1.396-.165-.534-.143-1.085-.015-1.645.245-1.07.873-2.11 1.274-2.763.107-.065.037.135-.408.974-.396.751-1.14 2.497-.122 3.854a8.123 8.123 0 01.647-2.876c.564-1.278 1.743-3.504 1.836-5.268.048.036.217.135.289.202.218.133.38.333.59.465.21.201.477.335.876.335.039.003.075.006.11.006.412 0 .73-.134.997-.268.29-.134.52-.334.74-.4h.005c.467-.135.835-.402 1.044-.7zm2.185 8.958c.037.6.343 1.245.882 1.377.588.134 1.434-.333 1.791-.765l.211-.01c.315-.007.577.01.847.268l.003.003c.208.199.305.53.391.876.085.4.154.78.409 1.066.486.527.645.906.636 1.14l.003-.007v.018l-.003-.012c-.015.262-.185.396-.498.595-.63.401-1.746.712-2.457 1.57-.618.737-1.37 1.14-2.036 1.191-.664.053-1.237-.2-1.574-.898l-.005-.003c-.21-.4-.12-1.025.056-1.69.176-.668.428-1.344.463-1.897.037-.714.076-1.335.195-1.814.12-.465.308-.797.641-.984l.045-.022zm-10.814.049h.01c.053 0 .105.005.157.014.376.055.706.333 1.023.752l.91 1.664.003.003c.243.533.754 1.064 1.189 1.637.434.598.77 1.131.729 1.57v.006c-.057.744-.48 1.148-1.125 1.294-.645.135-1.52.002-2.395-.464-.968-.536-2.118-.469-2.857-.602-.369-.066-.61-.2-.723-.4-.11-.2-.113-.602.123-1.23v-.004l.002-.003c.117-.334.03-.752-.027-1.118-.055-.401-.083-.71.043-.94.16-.334.396-.4.69-.533.294-.135.64-.202.915-.47h.002v-.002c.256-.268.445-.601.668-.838.19-.201.38-.336.663-.336zm7.159-9.074c-.435.201-.945.535-1.488.535-.542 0-.97-.267-1.28-.466-.154-.134-.28-.268-.373-.335-.164-.134-.144-.333-.074-.333.109.016.129.134.199.2.096.066.215.2.36.333.292.2.68.467 1.167.467.485 0 1.053-.267 1.398-.466.195-.135.445-.334.648-.467.156-.136.149-.267.279-.267.128.016.034.134-.147.332a8.097 8.097 0 01-.69.468zm-1.082-1.583V5.64c-.006-.02.013-.042.029-.05.074-.043.18-.027.26.004.063 0 .16.067.15.135-.006.049-.085.066-.135.066-.055 0-.092-.043-.141-.068-.052-.018-.146-.008-.163-.065zm-.551 0c-.02.058-.113.049-.166.066-.047.025-.086.068-.14.068-.05 0-.13-.02-.136-.068-.01-.066.088-.133.15-.133.08-.031.184-.047.259-.005.019.009.036.03.03.05v.02h.003z" />
+            </svg>
+            Linux
+          </button>
+          <button class="platform-tab-btn" data-platform="macos">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.4c.66-.82 1.11-1.96.99-3.1-.96.04-2.11.64-2.79 1.44-.59.69-1.11 1.83-.97 2.94 1.07.08 2.12-.56 2.77-1.28z" />
+            </svg>
+            macOS
+          </button>
+          <button class="platform-tab-btn" data-platform="pip">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="4 17 10 11 4 5"></polyline>
+              <line x1="12" y1="19" x2="20" y2="19"></line>
+            </svg>
+            Pip
+          </button>
+        </div>
+
+        <!-- Windows Panel -->
+        <div class="platform-panel active" id="panel-windows">
+          <div
+            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: var(--space-2);">
+            <div style="font-weight: 600; font-size: 0.95rem;">Windows (PowerShell 1-Liner)</div>
+            <span class="badge badge-emerald">PowerShell</span>
+          </div>
+          <div class="code-box">
+            <div class="code-box-content">
+              <code
+                id="winOneLinerCode">powershell -ExecutionPolicy Bypass -Command "Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/EG1DOTIN/pyEGClamUI/main/setup/install.ps1' -OutFile setup.ps1; .\setup.ps1"</code>
+            </div>
+            <button class="copy-btn" data-clipboard-target="#winOneLinerCode">Copy</button>
+          </div>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.75rem;">
+            Automated bootstrap setup provisions Python, creates an isolated virtual environment (<code>.venv</code>),
+            checks ClamAV binaries, and configures desktop shortcuts automatically.
+          </p>
+        </div>
+
+        <!-- Linux Panel -->
+        <div class="platform-panel" id="panel-linux">
+          <div
+            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: var(--space-2);">
+            <div style="font-weight: 600; font-size: 0.95rem;">Linux (Bash 1-Liner)</div>
+            <span class="badge badge-emerald">Universal Bash</span>
+          </div>
+          <div class="code-box">
+            <div class="code-box-content">
+              <code
+                id="linuxOneLinerCode">curl -sSL https://raw.githubusercontent.com/EG1DOTIN/pyEGClamUI/main/setup/install.sh | bash</code>
+            </div>
+            <button class="copy-btn" data-clipboard-target="#linuxOneLinerCode">Copy</button>
+          </div>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.75rem;">
+            Provisions isolated virtual environment, checks ClamAV daemon (<code>clamd</code>), installs dependencies,
+            and creates system application menu entries with icons.
+          </p>
+        </div>
+
+        <!-- macOS Panel -->
+        <div class="platform-panel" id="panel-macos">
+          <div
+            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: var(--space-2);">
+            <div style="font-weight: 600; font-size: 0.95rem;">macOS (Terminal 1-Liner)</div>
+            <span class="badge badge-emerald">Universal Bash</span>
+          </div>
+          <div class="code-box">
+            <div class="code-box-content">
+              <code
+                id="macOneLinerCode">curl -sSL https://raw.githubusercontent.com/EG1DOTIN/pyEGClamUI/main/setup/install.sh | bash</code>
+            </div>
+            <button class="copy-btn" data-clipboard-target="#macOneLinerCode">Copy</button>
+          </div>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.75rem;">
+            Supports Apple Silicon (M-series) and Intel architectures, configures environment paths, and integrates with
+            the top Menu Bar.
+          </p>
+        </div>
+
+        <!-- Pip Panel -->
+        <div class="platform-panel" id="panel-pip">
+          <div
+            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: var(--space-2);">
+            <div style="font-weight: 600; font-size: 0.95rem;">Python Pip (Cross-Platform)</div>
+            <span class="badge badge-emerald">Universal PyPI</span>
+          </div>
+          <div class="code-box">
+            <div class="code-box-content">
+              <code id="pipOneLinerCode">pip install pyegclamui</code>
+            </div>
+            <button class="copy-btn" data-clipboard-target="#pipOneLinerCode">Copy</button>
+          </div>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.75rem;">
+            Install directly from PyPI into your active Python environment. Launch anytime with <code>pyegclamui</code>
+            or short alias <code>egclam</code>.
+          </p>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================================================================
+       Footer
+       ======================================================================== -->
+  <!-- template:footer -->
+<footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="brand-link" style="margin-bottom: 0.5rem;">
+            <img src="assets/images/egav.svg" alt="pyEGClamUI" class="brand-logo-img" width="24" height="24">
+            <span class="brand-name">pyEGClam<span class="brand-accent">UI</span></span>
+          </div>
+          <p class="footer-brand-desc">
+            An open-source, cross-platform desktop graphical user interface for the ClamAV antivirus engine.
+          </p>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Navigation</div>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="documentation.html">Docs</a></li>
+            <li><a href="documentation.html#features">Features</a></li>
+            <li><a href="ui-preview.html">UI Preview</a></li>
+            <li><a href="download.html">Download</a></li>
+            <li><a href="getting-started.html">Getting Started</a></li>
+            <li><a href="updates.html">Updates</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Resources</div>
+          <ul class="footer-links">
+            <li><a href="about.html">About &amp; FAQ</a></li>
+            <li><a href="updates.html">Release History</a></li>
+            <li><a href="https://github.com/EG1DOTIN/pyEGClamUI" target="_blank" rel="noopener noreferrer"
+                data-config="githubRepo">GitHub Repository</a></li>
+            <li><a href="https://github.com/EG1DOTIN/pyEGClamUI/issues" target="_blank" rel="noopener noreferrer"
+                data-config="githubIssues">GitHub Issues</a></li>
+            <li><a href="https://github.com/EG1DOTIN/pyEGClamUI/releases" target="_blank" rel="noopener noreferrer"
+                data-config="githubReleases">Releases</a></li>
+            <li><a href="https://www.clamav.net/" target="_blank" rel="noopener noreferrer">ClamAV Official</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Organization</div>
+          <ul class="footer-links">
+            <li><a href="https://eg1.in" target="_blank" rel="noopener noreferrer" data-config="officialSite">EG1 (eg1.in)</a></li>
+            <li><a href="https://www.eg1.in/contact" target="_blank" rel="noopener noreferrer"
+                data-config="contactUrl">Contact EG1</a></li>
+            <li><a href="https://eg1.in/privacypolicy.html" target="_blank" rel="noopener noreferrer"
+                data-config="privacyPolicy">Privacy Policy</a></li>
+            <li><a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener noreferrer">GPL-3.0
+                License</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p class="trademark-notice">
+          <strong>Trademark Disclaimer:</strong> ClamAV® is a registered trademark of Cisco Systems, Inc. <span
+            class="product-name">pyEGClamUI</span> is an independent open-source project and is not affiliated with,
+          endorsed by, or sponsored by Cisco Systems, Inc.
+        </p>
+        <div class="footer-copyright">
+          &copy; 2026 <a href="https://eg1.in" target="_blank" rel="noopener noreferrer">EG1 (eg1.in)</a>.
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- /template:footer -->
+
+  <!-- Scripts -->
+  <script src="assets/js/main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentation - pyEGClamUI Architecture & Technical Guides</title>
+
+  <meta name="title" content="Documentation - pyEGClamUI Architecture & Technical Guides">
+  <meta name="description"
+    content="Complete technical and architectural documentation for pyEGClamUI: Real-Time Guard, Quarantine Vault, Scanner Engine, Cross-Platform Hardening, and CLI utilities.">
+  <meta name="keywords"
+    content="pyEGClamUI Documentation, ClamAV GUI docs, RealTimeGuard, QuarantineManager, ClamScanner, ClamAV architecture, PySide6 antivirus, EG1">
+  <meta name="author" content="EG1">
+  <link rel="icon" type="image/x-icon" href="assets/images/egav.ico">
+  <link rel="icon" type="image/svg+xml" href="assets/images/egav.svg">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://av.eg1.in/documentation.html">
+  <meta property="og:title" content="Documentation - pyEGClamUI Architecture & Technical Guides">
+  <meta property="og:description"
+    content="In-depth technical reference, concurrency models, and subsystem documentation for the pyEGClamUI desktop antivirus interface.">
+  <meta property="og:image" content="https://av.eg1.in/assets/images/og-preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="pyEGClamUI Technical Documentation">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Documentation - pyEGClamUI Architecture & Technical Guides">
+  <meta name="twitter:description"
+    content="In-depth technical reference, concurrency models, and subsystem documentation for the pyEGClamUI desktop antivirus interface.">
+  <meta name="twitter:image" content="https://av.eg1.in/assets/images/twitter-card.png">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/docs.css">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "pyEGClamUI Technical & Architectural Documentation",
+    "description": "Comprehensive technical architecture, subsystem design, and CLI reference for the pyEGClamUI cross-platform ClamAV desktop interface.",
+    "author": {
+      "@type": "Organization",
+      "name": "EG1",
+      "url": "https://eg1.in"
+    }
+  }
+  </script>
+</head>
+
+<body>
+
+  <!-- ========================================================================
+       Site Navigation
+       ======================================================================== -->
+  <!-- template:header -->
+<header class="site-header">
+    <div class="container">
+      <nav class="navbar" aria-label="Main Navigation">
+        <a href="index.html" class="brand-link" aria-label="pyEGClamUI Home">
+          <img src="assets/images/egav.svg" alt="pyEGClamUI Official Logo" class="brand-logo-img" width="32" height="32">
+          <span class="brand-name">pyEGClam<span class="brand-accent">UI</span></span>
+        </a>
+
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="documentation.html" class="nav-link active">Docs</a></li>
+          <li><a href="ui-preview.html" class="nav-link">UI Preview</a></li>
+          <li><a href="download.html" class="nav-link">Download</a></li>
+          <li><a href="getting-started.html" class="nav-link">Getting Started</a></li>
+          <li><a href="about.html" class="nav-link">About &amp; FAQ</a></li>
+
+          <!-- Mobile Nav Actions (Visible on Small Screens) -->
+          <li class="nav-actions-mobile">
+            <a href="https://github.com/EG1DOTIN/pyEGClamUI" target="_blank" rel="noopener noreferrer"
+              class="btn btn-secondary btn-sm" style="width: 100%;" data-config="githubRepo">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+              </svg>
+              GitHub Repository
+            </a>
+          </li>
+        </ul>
+
+        <div class="nav-actions">
+          <!-- Notification Bell Dropdown -->
+          <div class="notification-wrapper">
+            <button class="notification-bell-btn" id="notificationBellBtn" type="button" aria-label="Recent updates"
+              aria-haspopup="dialog" aria-expanded="false">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+              </svg>
+              <span class="notification-dot" id="notificationDot" aria-hidden="true"></span>
+            </button>
+            <div class="notification-dropdown" id="notificationDropdown" role="dialog" aria-label="Recent Updates" hidden>
+              <div class="notification-dropdown-header">
+                <div class="notification-dropdown-title">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                  </svg>
+                  <span>Recent Updates</span>
+                  <span class="badge badge-emerald" id="notificationBadge" style="font-size: 0.65rem; padding: 2px 6px;">New</span>
+                </div>
+                <button class="notification-close-btn" id="notificationCloseBtn" type="button" aria-label="Close notification panel">&times;</button>
+              </div>
+              <div class="notification-list" id="notificationList" tabindex="0">
+                <div class="notification-loading">Loading updates...</div>
+              </div>
+              <div class="notification-dropdown-footer">
+                <a href="updates.html" class="notification-view-all">All Updates &amp; Release History &rarr;</a>
+              </div>
+            </div>
+          </div>
+
+          <a href="https://github.com/EG1DOTIN/pyEGClamUI" target="_blank" rel="noopener noreferrer"
+            class="btn btn-secondary btn-sm" aria-label="GitHub Repository" data-config="githubRepo">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+            </svg>
+            GitHub
+          </a>
+        </div>
+
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+  <!-- /template:header -->
+
+  <!-- ========================================================================
+       Documentation Main Workspace
+       ======================================================================== -->
+  <main class="docs-page">
+    <div class="docs-container">
+
+      <!-- Mobile Document Menu Trigger -->
+      <div class="docs-mobile-bar">
+        <button class="docs-mobile-trigger" id="docsMobileToggle" aria-label="Open Documentation Sidebar">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+          <span>Browse Documentation</span>
+        </button>
+        <span class="badge" style="font-size: 0.75rem;">16 Guides</span>
+      </div>
+
+      <!-- Backdrop for Mobile Drawer -->
+      <div class="docs-backdrop" id="docsBackdrop"></div>
+
+      <!-- Left Column: Navigation Sidebar -->
+      <aside class="docs-sidebar" id="docsSidebar" aria-label="Documentation Navigation">
+        <div class="docs-drawer-close">
+          <button class="docs-close-btn" id="docsCloseDrawer" aria-label="Close sidebar">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="docs-search-wrapper">
+          <svg class="docs-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="docsSearchInput" class="docs-search-input" placeholder="Search guides &amp; topics..."
+            aria-label="Filter documentation">
+        </div>
+
+        <!-- Rendered Navigation Tree -->
+        <nav id="docsNavGroups"></nav>
+      </aside>
+
+      <!-- Center Column: Markdown Viewer -->
+      <article class="docs-main-col">
+        <div class="docs-card">
+          <!-- Document Header Toolbar -->
+          <div class="docs-toolbar">
+            <div class="docs-breadcrumbs">
+              <a href="index.html">Home</a>
+              <span class="docs-breadcrumbs-sep">/</span>
+              <a href="documentation.html">Docs</a>
+              <span class="docs-breadcrumbs-sep">/</span>
+              <span id="breadcrumbCategory">Core Architecture</span>
+              <span class="docs-breadcrumbs-sep">/</span>
+              <span class="docs-breadcrumbs-current" id="breadcrumbCurrent">Loading...</span>
+            </div>
+
+            <div class="docs-actions">
+              <button class="docs-action-btn" id="copyPageLinkBtn" title="Copy link to this document">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                </svg>
+                <span>Share Link</span>
+              </button>
+              <button class="docs-action-btn" id="viewRawBtn" title="View raw Markdown source">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="16 18 22 12 16 6"></polyline>
+                  <polyline points="8 6 2 12 8 18"></polyline>
+                </svg>
+                <span>View Raw</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Rendered Markdown Body -->
+          <div class="markdown-body" id="markdownContent">
+            <div style="text-align: center; padding: var(--space-12) 0;">
+              <p style="color: var(--text-muted);">Loading documentation content...</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Right Column: On-Page Table of Contents -->
+      <aside class="docs-toc-col" aria-label="On this page">
+        <div class="docs-toc-title">On This Page</div>
+        <ul class="docs-toc-list" id="docsTocList">
+          <li class="docs-toc-item"><span class="docs-toc-link">Loading sections...</span></li>
+        </ul>
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- ========================================================================
+       Raw Markdown Source Modal
+       ======================================================================== -->
+  <div class="raw-modal-overlay" id="rawModal" role="dialog" aria-modal="true" aria-labelledby="rawModalTitle">
+    <div class="raw-modal">
+      <div class="raw-modal-header">
+        <div class="raw-modal-title" id="rawModalTitle">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+          <span>Raw Markdown Source</span>
+        </div>
+        <button class="docs-close-btn" id="rawCloseBtn" aria-label="Close raw modal">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="raw-modal-body">
+        <textarea id="rawTextarea" class="raw-textarea" readonly aria-label="Raw Markdown Content"></textarea>
+      </div>
+      <div class="raw-modal-footer">
+        <button class="btn btn-secondary btn-sm" id="rawModalCloseAction">Close</button>
+        <button class="btn btn-primary btn-sm" id="rawCopyBtn">Copy Markdown</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="docs-toast" id="docsToast" role="status" aria-live="polite"></div>
+
+  <!-- ========================================================================
+       Site Footer
+       ======================================================================== -->
+  <!-- template:footer -->
+<footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="brand-link" style="margin-bottom: 0.5rem;">
+            <img src="assets/images/egav.svg" alt="pyEGClamUI" class="brand-logo-img" width="24" height="24">
+            <span class="brand-name">pyEGClam<span class="brand-accent">UI</span></span>
+          </div>
+          <p class="footer-brand-desc">
+            An open-source, cross-platform desktop graphical user interface for the ClamAV antivirus engine.
+          </p>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Navigation</div>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="documentation.html">Docs</a></li>
+            <li><a href="documentation.html#features">Features</a></li>
+            <li><a href="ui-preview.html">UI Preview</a></li>
+            <li><a href="download.html">Download</a></li>
+            <li><a href="getting-started.html">Getting Started</a></li>
+            <li><a href="updates.html">Updates</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Resources</div>
+          <ul class="footer-links">
+            <li><a href="about.html">About &amp; FAQ</a></li>
+            <li><a href="updates.html">Release History</a></li>
+            <li><a href="https://github.com/EG1DOTIN/pyEGClamUI" target="_blank" rel="noopener noreferrer"
+                data-config="githubRepo">GitHub Repository</a></li>
+            <li><a href="https://github.com/EG1DOTIN/pyEGClamUI/issues" target="_blank" rel="noopener noreferrer"
+                data-config="githubIssues">GitHub Issues</a></li>
+            <li><a href="https://github.com/EG1DOTIN/pyEGClamUI/releases" target="_blank" rel="noopener noreferrer"
+                data-config="githubReleases">Releases</a></li>
+            <li><a href="https://www.clamav.net/" target="_blank" rel="noopener noreferrer">ClamAV Official</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Organization</div>
+          <ul class="footer-links">
+            <li><a href="https://eg1.in" target="_blank" rel="noopener noreferrer" data-config="officialSite">EG1 (eg1.in)</a></li>
+            <li><a href="https://www.eg1.in/contact" target="_blank" rel="noopener noreferrer"
+                data-config="contactUrl">Contact EG1</a></li>
+            <li><a href="https://eg1.in/privacypolicy.html" target="_blank" rel="noopener noreferrer"
+                data-config="privacyPolicy">Privacy Policy</a></li>
+            <li><a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener noreferrer">GPL-3.0
+                License</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p class="trademark-notice">
+          <strong>Trademark Disclaimer:</strong> ClamAV® is a registered trademark of Cisco Systems, Inc. <span
+            class="product-name">pyEGClamUI</span> is an independent open-source project and is not affiliated with,
+          endorsed by, or sponsored by Cisco Systems, Inc.
+        </p>
+        <div class="footer-copyright">
+          &copy; 2026 <a href="https://eg1.in" target="_blank" rel="noopener noreferrer">EG1 (eg1.in)</a>.
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- /template:footer -->
+
+  <!-- Vendor Scripts (100% Offline Cached) -->
+  <script src="assets/vendor/marked.min.js"></script>
+  <script src="assets/vendor/prism.bundle.js"></script>
+  <script src="assets/vendor/mermaid.min.js"></script>
+
+  <!-- Docs Data & Controller -->
+  <script src="assets/js/docs-data.js"></script>
+  <script src="assets/js/docs-viewer.js"></script>
+  <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>

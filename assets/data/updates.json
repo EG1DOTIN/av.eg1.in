@@ -1,0 +1,25 @@
+{
+  "lastUpdated": "2026-09-30",
+  "updates": [
+    {
+      "id": "v3-0-0",
+      "version": "3.0.0",
+      "title": "pyEGClamUI v3.0.0 Released",
+      "date": "September 30, 2026",
+      "badge": "Latest Release",
+      "badgeType": "emerald",
+      "summary": "Major cross-platform release featuring ready-to-run standalone desktop binaries for Windows (.exe), Linux (AppImage & Tarball), and macOS (.dmg), automated PowerShell & Bash one-liner setup scripts, full native ClamAV engine control with live scan progress streaming, and a high-performance dark cybersecurity UI.",
+      "link": "updates.html#v3-0-0"
+    },
+    {
+      "id": "legacy-deprecation",
+      "version": "Notice",
+      "title": "Legacy Versions Deprecation Notice",
+      "date": "September 2026",
+      "badge": "Deprecated",
+      "badgeType": "amber",
+      "summary": "All previous legacy projects and repositories—including EGClamNetAntivirus and EG-ClamNet-Antivirus-2—are officially deprecated, unsupported, and will be permanently removed from GitHub and version history soon. Please migrate to pyEGClamUI v3.0.0+.",
+      "link": "updates.html"
+    }
+  ]
+}

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About &amp; FAQ - pyEGClamUI Open Source Project</title>
+
+  <meta name="title" content="About &amp; FAQ - pyEGClamUI Open Source Project">
+  <meta name="description"
+    content="Learn about pyEGClamUI, its architecture, open-source licensing under GPL-3.0, ClamAV trademark attribution, and answers to common questions.">
+  <meta name="keywords"
+    content="about pyEGClamUI, EG1 antivirus, clamav gui about, open source security, pyegclamui faq">
+  <link rel="icon" type="image/x-icon" href="assets/images/egav.ico">
+  <link rel="icon" type="image/svg+xml" href="assets/images/egav.svg">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://av.eg1.in/about.html">
+  <meta property="og:title" content="About & FAQ - pyEGClamUI Open-Source Desktop GUI">
+  <meta property="og:description"
+    content="Learn about pyEGClamUI by EG1, an open-source GPL-3.0 desktop frontend for ClamAV. Read our FAQ, technical architecture, and community support channels.">
+  <meta property="og:image" content="https://av.eg1.in/assets/images/og-preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="About pyEGClamUI - Open Source ClamAV Frontend">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="About & FAQ - pyEGClamUI Open-Source Desktop GUI">
+  <meta name="twitter:description"
+    content="Learn about pyEGClamUI by EG1, an open-source GPL-3.0 desktop frontend for ClamAV. Read our FAQ, technical architecture, and community support channels.">
+  <meta name="twitter:image" content="https://av.eg1.in/assets/images/twitter-card.png">
+
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <!-- template:header -->
+<header class="site-header">
+    <div class="container">
+      <nav class="navbar" aria-label="Main Navigation">
+        <a href="index.html" class="brand-link" aria-label="pyEGClamUI Home">
+          <img src="assets/images/egav.svg" alt="pyEGClamUI Official Logo" class="brand-logo-img" width="32" height="32">
+          <span class="brand-name">pyEGClam<span class="brand-accent">UI</span></span>
+        </a>
+
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="documentation.html" class="nav-link">Docs</a></li>
+          <li><a href="ui-preview.html" class="nav-link">UI Preview</a></li>
+          <li><a href="download.html" class="nav-link">Download</a></li>
+          <li><a href="getting-started.html" class="nav-link">Getting Started</a></li>
+          <li><a href="about.html" class="nav-link active">About &amp; FAQ</a></li>
+
+          <!-- Mobile Nav Actions (Visible on Small Screens) -->
+          <li class="nav-actions-mobile">
+            <a href="https://github.com/EG1DOTIN/pyEGClamUI" target="_blank" rel="noopener noreferrer"
+              class="btn btn-secondary btn-sm" style="width: 100%;" data-config="githubRepo">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+              </svg>
+              GitHub Repository
+            </a>
+          </li>
+        </ul>
+
+        <div class="nav-actions">
+          <!-- Notification Bell Dropdown -->
+          <div class="notification-wrapper">
+            <button class="notification-bell-btn" id="notificationBellBtn" type="button" aria-label="Recent updates"
+              aria-haspopup="dialog" aria-expanded="false">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+              </svg>
+              <span class="notification-dot" id="notificationDot" aria-hidden="true"></span>
+            </button>
+            <div class="notification-dropdown" id="notificationDropdown" role="dialog" aria-label="Recent Updates" hidden>
+              <div class="notification-dropdown-header">
+                <div class="notification-dropdown-title">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                  </svg>
+                  <span>Recent Updates</span>
+                  <span class="badge badge-emerald" id="notificationBadge" style="font-size: 0.65rem; padding: 2px 6px;">New</span>
+                </div>
+                <button class="notification-close-btn" id="notificationCloseBtn" type="button" aria-label="Close notification panel">&times;</button>
+              </div>
+              <div class="notification-list" id="notificationList" tabindex="0">
+                <div class="notification-loading">Loading updates...</div>
+              </div>
+              <div class="notification-dropdown-footer">
+                <a href="updates.html" class="notification-view-all">All Updates &amp; Release History &rarr;</a>
+              </div>
+            </div>
+          </div>
+
+          <a href="https://github.com/EG1DOTIN/pyEGClamUI" target="_blank" rel="noopener noreferrer"
+            class="btn btn-secondary btn-sm" aria-label="GitHub Repository" data-config="githubRepo">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+            </svg>
+            GitHub
+          </a>
+        </div>
+
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+  <!-- /template:header -->
+
+  <main>
+    <!-- Header Hero -->
+    <section class="section" style="padding-bottom: var(--space-8);">
+      <div class="container container-narrow" style="text-align: center;">
+        <div class="section-tag">Project Overview</div>
+        <h1 class="hero-title" style="font-size: var(--text-3xl);">About <span class="product-name">pyEGClamUI</span>
+        </h1>
+        <p class="hero-subtitle">
+          Background details, architecture overview, open-source licensing, and answers to common questions.
+        </p>
+      </div>
+    </section>
+
+    <!-- Project Story -->
+    <section class="section section-subtle">
+      <div class="container container-narrow">
+        <div
+          style="background: var(--bg-surface); border: 1px solid var(--border-default); border-radius: var(--radius-lg); padding: var(--space-8); line-height: 1.7;">
+          <h2
+            style="font-size: var(--text-xl); font-weight: 700; margin-bottom: var(--space-3); color: var(--text-primary);">
+            Project Background &amp; Mission
+          </h2>
+          <p style="color: var(--text-secondary); margin-bottom: var(--space-4);">
+            <span class="product-name">pyEGClamUI</span> provides a native, responsive graphical user interface for
+            ClamAV, for running scans, managing isolated threats, and updating virus definition databases across
+            Windows, Linux, and macOS—without adding commercial bloatware, advertisements, or background tracking.
+          </p>
+          <p style="color: var(--text-secondary);">
+            The project is independently maintained and published by <a href="https://eg1.in" target="_blank"
+              rel="noopener noreferrer" style="color: var(--color-emerald); font-weight: 600;">EG1 (eg1.in)</a> under
+            the <strong>GNU General Public License v3.0 (GPL-3.0)</strong>. Both the desktop application and this
+            website are fully open source.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comprehensive FAQ Accordion -->
+    <section class="section section-subtle">
+      <div class="container container-narrow">
+        <div class="section-header">
+          <div class="section-tag">Frequently Asked Questions</div>
+          <h2 class="section-title">Answers to Common Questions</h2>
+        </div>
+
+        <div class="faq-list">
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>Can I use it alongside Windows Defender or other security tools?</span>
+              <svg class="faq-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="faq-answer">
+              Yes. It operates entirely as a standard user-space desktop application without installing system kernel
+              drivers or intercepting network traffic. It coexists smoothly alongside Windows Defender, macOS
+              Gatekeeper, or third-party antivirus suites as an on-demand, secondary scanner.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>Do I need an active internet connection to scan files?</span>
+              <svg class="faq-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="faq-answer">
+              No. All file and memory scanning operations execute completely offline on your local machine using locally
+              stored virus signature databases. An internet connection is only required when checking for and
+              downloading definition updates via FreshClam.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>What data or telemetry does the application collect?</span>
+              <svg class="faq-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="faq-answer">
+              Zero data is collected or transmitted by default. Anonymous diagnostic metrics (such as OS platform and
+              ClamAV version) are strictly 100% opt-in. You can preview the exact JSON payload anytime in the Settings
+              tab before choosing whether to share it.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>Is it affiliated with Cisco or ClamAV?</span>
+              <svg class="faq-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="faq-answer">
+              No. It is an independent open-source desktop interface and is not affiliated with, endorsed by, or
+              sponsored by Cisco Systems, Inc. ClamAV® is a registered trademark of Cisco Systems, Inc.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Community & Contact -->
+    <section class="section section-subtle">
+      <div class="container container-narrow" style="text-align: center;">
+        <div class="section-tag">Community &amp; Support</div>
+        <h2 class="section-title">Report Issues & Feedback</h2>
+        <p class="section-desc" style="margin-bottom: var(--space-6);">
+          Have a question, feedback, or a bug to report? Connect with the project via GitHub or EG1 Contact Page...
+        </p>
+
+        <div style="display: flex; gap: var(--space-4); justify-content: center; flex-wrap: wrap;">
+          <a href="https://github.com/EG1DOTIN/pyEGClamUI/issues" target="_blank" rel="noopener noreferrer"
+            class="btn btn-secondary btn-lg">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+            </svg>
+            GitHub Issues &amp; Bug Reports
+          </a>
+          <a href="https://www.eg1.in/contact" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
+            EG1 Contact Form (eg1.in) &rarr;
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <!-- template:footer -->
+<footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="brand-link" style="margin-bottom: 0.5rem;">
+            <img src="assets/images/egav.svg" alt="pyEGClamUI" class="brand-logo-img" width="24" height="24">
+            <span class="brand-name">pyEGClam<span class="brand-accent">UI</span></span>
+          </div>
+          <p class="footer-brand-desc">
+            An open-source, cross-platform desktop graphical user interface for the ClamAV antivirus engine.
+          </p>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Navigation</div>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="documentation.html">Docs</a></li>
+            <li><a href="documentation.html#features">Features</a></li>
+            <li><a href="ui-preview.html">UI Preview</a></li>
+            <li><a href="download.html">Download</a></li>
+            <li><a href="getting-started.html">Getting Started</a></li>
+            <li><a href="updates.html">Updates</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Resources</div>
+          <ul class="footer-links">
+            <li><a href="about.html">About &amp; FAQ</a></li>
+            <li><a href="updates.html">Release History</a></li>
+            <li><a href="https://github.com/EG1DOTIN/pyEGClamUI" target="_blank" rel="noopener noreferrer"
+                data-config="githubRepo">GitHub Repository</a></li>
+            <li><a href="https://github.com/EG1DOTIN/pyEGClamUI/issues" target="_blank" rel="noopener noreferrer"
+                data-config="githubIssues">GitHub Issues</a></li>
+            <li><a href="https://github.com/EG1DOTIN/pyEGClamUI/releases" target="_blank" rel="noopener noreferrer"
+                data-config="githubReleases">Releases</a></li>
+            <li><a href="https://www.clamav.net/" target="_blank" rel="noopener noreferrer">ClamAV Official</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Organization</div>
+          <ul class="footer-links">
+            <li><a href="https://eg1.in" target="_blank" rel="noopener noreferrer" data-config="officialSite">EG1 (eg1.in)</a></li>
+            <li><a href="https://www.eg1.in/contact" target="_blank" rel="noopener noreferrer"
+                data-config="contactUrl">Contact EG1</a></li>
+            <li><a href="https://eg1.in/privacypolicy.html" target="_blank" rel="noopener noreferrer"
+                data-config="privacyPolicy">Privacy Policy</a></li>
+            <li><a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener noreferrer">GPL-3.0
+                License</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p class="trademark-notice">
+          <strong>Trademark Disclaimer:</strong> ClamAV® is a registered trademark of Cisco Systems, Inc. <span
+            class="product-name">pyEGClamUI</span> is an independent open-source project and is not affiliated with,
+          endorsed by, or sponsored by Cisco Systems, Inc.
+        </p>
+        <div class="footer-copyright">
+          &copy; 2026 <a href="https://eg1.in" target="_blank" rel="noopener noreferrer">EG1 (eg1.in)</a>.
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- /template:footer -->
+
+  <script src="assets/js/main.js"></script>
+</body>
+
+</html>

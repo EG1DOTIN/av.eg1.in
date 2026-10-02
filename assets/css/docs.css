@@ -945,14 +945,16 @@
 .mermaid-modal-viewport {
   transform-origin: center center;
   transition: transform 0.05s ease-out;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
+  will-change: transform;
 }
 
 .mermaid-modal-viewport svg {
   max-width: none !important;
-  height: auto;
+  max-height: none !important;
+  display: block;
 }
 
 .mermaid-modal-footer {

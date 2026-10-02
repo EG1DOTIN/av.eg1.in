@@ -651,6 +651,27 @@ document.addEventListener('DOMContentLoaded', () => {
       const target = crossLink.getAttribute('data-doc-target');
       const anchor = crossLink.getAttribute('data-doc-anchor') || '';
       navigateToDoc(target, anchor);
+      return;
+    }
+
+    const expandBtn = e.target.closest('.mermaid-expand-btn');
+    if (expandBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      const wrapper = expandBtn.closest('.mermaid-wrapper');
+      if (wrapper) {
+        const svg = wrapper.querySelector('.mermaid-container svg');
+        if (svg) openMermaidModal(svg);
+      }
+    }
+  });
+
+  // Handle double-click on diagram container to expand
+  markdownContainer.addEventListener('dblclick', (e) => {
+    const container = e.target.closest('.mermaid-container');
+    if (container) {
+      const svg = container.querySelector('svg');
+      if (svg) openMermaidModal(svg);
     }
   });
 
@@ -799,25 +820,56 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function openMermaidModal(svgEl) {
     if (!mermaidModal || !mermaidModalViewport || !svgEl) return;
+
     mermaidModalViewport.innerHTML = '';
     const clonedSvg = svgEl.cloneNode(true);
-    clonedSvg.removeAttribute('style');
+
+    // Determine dimensions from viewBox, attributes, or getBoundingClientRect
+    let width = 1000;
+    let height = 600;
+
+    const viewBox = svgEl.viewBox?.baseVal;
+    if (viewBox && viewBox.width > 0 && viewBox.height > 0) {
+      width = viewBox.width;
+      height = viewBox.height;
+    } else {
+      const bcr = svgEl.getBoundingClientRect();
+      if (bcr.width > 0 && bcr.height > 0) {
+        width = bcr.width;
+        height = bcr.height;
+      }
+    }
+
+    // Force explicit dimensions on the cloned SVG so it cannot collapse to 0 in flexbox
+    clonedSvg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+    clonedSvg.setAttribute('width', width);
+    clonedSvg.setAttribute('height', height);
+    clonedSvg.style.width = width + 'px';
+    clonedSvg.style.height = height + 'px';
+    clonedSvg.style.minWidth = width + 'px';
     clonedSvg.style.maxWidth = 'none';
-    clonedSvg.style.height = 'auto';
+    clonedSvg.style.display = 'block';
 
-    // Calculate initial fit zoom
-    const svgWidth = clonedSvg.viewBox?.baseVal?.width || 1000;
-    const bodyWidth = mermaidModalBody ? (mermaidModalBody.clientWidth - 80) : 1100;
-    const fitZoom = Math.min(1.2, Math.max(0.65, Number((bodyWidth / svgWidth).toFixed(2))));
+    // Open modal FIRST to ensure modal viewport dimensions are measurable
+    mermaidModal.classList.add('open');
+    document.body.style.overflow = 'hidden';
 
-    currentZoom = fitZoom;
+    // Append cloned SVG into viewport
+    mermaidModalViewport.appendChild(clonedSvg);
+
+    // Calculate fit zoom based on active modal body dimensions
+    const bodyRect = mermaidModalBody ? mermaidModalBody.getBoundingClientRect() : null;
+    const availWidth = bodyRect && bodyRect.width > 0 ? (bodyRect.width - 80) : 1100;
+    const availHeight = bodyRect && bodyRect.height > 0 ? (bodyRect.height - 80) : 700;
+
+    const scaleX = availWidth / width;
+    const scaleY = availHeight / height;
+    const fitZoom = Math.min(scaleX, scaleY, 1.2);
+
+    currentZoom = Number(Math.max(0.2, fitZoom).toFixed(2));
     panX = 0;
     panY = 0;
     updateModalTransform();
-
-    mermaidModalViewport.appendChild(clonedSvg);
-    mermaidModal.classList.add('open');
-    document.body.style.overflow = 'hidden';
   }
 
   function closeMermaidModal() {

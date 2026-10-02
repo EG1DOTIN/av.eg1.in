@@ -169,8 +169,33 @@ document.addEventListener('DOMContentLoaded', () => {
       // Mermaid diagram block
       if (lang === 'mermaid') {
         return `
-          <div class="mermaid-container">
-            <pre class="mermaid">${code}</pre>
+          <div class="mermaid-wrapper">
+            <div class="mermaid-header">
+              <span class="mermaid-header-title">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="7" height="7"></rect>
+                  <rect x="14" y="3" width="7" height="7"></rect>
+                  <rect x="14" y="14" width="7" height="7"></rect>
+                  <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                <span>Architecture &amp; Flow Diagram</span>
+              </span>
+              <div class="mermaid-header-actions">
+                <span class="mermaid-scroll-hint">↔ Scroll or Drag to Explore</span>
+                <button class="mermaid-action-btn mermaid-expand-btn" aria-label="Expand Diagram Fullscreen">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                  <span>Fullscreen</span>
+                </button>
+              </div>
+            </div>
+            <div class="mermaid-container" title="Click and drag to scroll diagram">
+              <pre class="mermaid">${code}</pre>
+            </div>
           </div>
         `;
       }
@@ -400,6 +425,65 @@ document.addEventListener('DOMContentLoaded', () => {
       document.head.appendChild(script);
     });
     return mermaidLoadingPromise;
+  function enableDragToScroll(container) {
+    if (!container || container.dataset.dragEnabled) return;
+    container.dataset.dragEnabled = '1';
+
+    let isDown = false;
+    let startX = 0;
+    let scrollLeft = 0;
+
+    container.addEventListener('mousedown', (e) => {
+      if (e.target.closest('button') || e.target.closest('a')) return;
+      isDown = true;
+      startX = e.pageX - container.offsetLeft;
+      scrollLeft = container.scrollLeft;
+    });
+
+    window.addEventListener('mouseup', () => { isDown = false; });
+    container.addEventListener('mouseleave', () => { isDown = false; });
+
+    container.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - container.offsetLeft;
+      const walk = (x - startX) * 1.5;
+      container.scrollLeft = scrollLeft - walk;
+    });
+  }
+
+  function postProcessMermaidDiagrams() {
+    markdownContainer.querySelectorAll('.mermaid-wrapper').forEach((wrapper) => {
+      const container = wrapper.querySelector('.mermaid-container');
+      const svg = wrapper.querySelector('svg');
+      if (!container || !svg) return;
+
+      // Prevent squishing: ensure SVG width remains readable
+      const viewBox = svg.viewBox?.baseVal;
+      if (viewBox && viewBox.width > 700) {
+        svg.style.minWidth = Math.max(viewBox.width, 850) + 'px';
+      }
+
+      // Enable mouse drag to scroll
+      enableDragToScroll(container);
+
+      // Wire Fullscreen Expand button
+      const expandBtn = wrapper.querySelector('.mermaid-expand-btn');
+      if (expandBtn && !expandBtn.dataset.bound) {
+        expandBtn.dataset.bound = '1';
+        expandBtn.addEventListener('click', () => {
+          openMermaidModal(svg);
+        });
+      }
+
+      // Double click on container to open fullscreen
+      if (!container.dataset.dblBound) {
+        container.dataset.dblBound = '1';
+        container.addEventListener('dblclick', () => {
+          openMermaidModal(svg);
+        });
+      }
+    });
   }
 
   // --------------------------------------------------------------------------
@@ -470,7 +554,14 @@ document.addEventListener('DOMContentLoaded', () => {
         .then((m) => {
           const currentNodes = markdownContainer.querySelectorAll('.mermaid');
           if (currentNodes.length > 0 && typeof m.run === 'function') {
-            m.run({ nodes: currentNodes });
+            const runPromise = m.run({ nodes: currentNodes });
+            if (runPromise && typeof runPromise.then === 'function') {
+              runPromise
+                .then(() => postProcessMermaidDiagrams())
+                .catch(() => postProcessMermaidDiagrams());
+            } else {
+              setTimeout(() => postProcessMermaidDiagrams(), 100);
+            }
           }
         })
         .catch((mermaidErr) => {
@@ -678,10 +769,124 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // --------------------------------------------------------------------------
+  // 11.5. Fullscreen Diagram Zoom Modal Controller
+  // --------------------------------------------------------------------------
+  const mermaidModal = document.getElementById('mermaidModal');
+  const mermaidCloseBtn = document.getElementById('mermaidCloseBtn');
+  const mermaidModalCloseAction = document.getElementById('mermaidModalCloseAction');
+  const mermaidModalViewport = document.getElementById('mermaidModalViewport');
+  const mermaidModalBody = document.getElementById('mermaidModalBody');
+  const mermaidZoomBadge = document.getElementById('mermaidZoomBadge');
+  const mermaidZoomInBtn = document.getElementById('mermaidZoomInBtn');
+  const mermaidZoomOutBtn = document.getElementById('mermaidZoomOutBtn');
+  const mermaidZoomResetBtn = document.getElementById('mermaidZoomResetBtn');
+
+  let currentZoom = 1;
+  let panX = 0;
+  let panY = 0;
+  let isPanningModal = false;
+  let modalStartX = 0;
+  let modalStartY = 0;
+
+  function updateModalTransform() {
+    if (!mermaidModalViewport) return;
+    mermaidModalViewport.style.transform = `translate(${panX}px, ${panY}px) scale(${currentZoom})`;
+    if (mermaidZoomBadge) mermaidZoomBadge.textContent = `${Math.round(currentZoom * 100)}%`;
+  }
+
+  function openMermaidModal(svgEl) {
+    if (!mermaidModal || !mermaidModalViewport || !svgEl) return;
+    mermaidModalViewport.innerHTML = '';
+    const clonedSvg = svgEl.cloneNode(true);
+    clonedSvg.removeAttribute('style');
+    clonedSvg.style.maxWidth = 'none';
+    clonedSvg.style.height = 'auto';
+
+    // Calculate initial fit zoom
+    const svgWidth = clonedSvg.viewBox?.baseVal?.width || 1000;
+    const bodyWidth = mermaidModalBody ? (mermaidModalBody.clientWidth - 80) : 1100;
+    const fitZoom = Math.min(1.2, Math.max(0.65, Number((bodyWidth / svgWidth).toFixed(2))));
+
+    currentZoom = fitZoom;
+    panX = 0;
+    panY = 0;
+    updateModalTransform();
+
+    mermaidModalViewport.appendChild(clonedSvg);
+    mermaidModal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMermaidModal() {
+    if (mermaidModal) {
+      mermaidModal.classList.remove('open');
+      document.body.style.overflow = '';
+      if (mermaidModalViewport) mermaidModalViewport.innerHTML = '';
+    }
+  }
+
+  if (mermaidCloseBtn) mermaidCloseBtn.addEventListener('click', closeMermaidModal);
+  if (mermaidModalCloseAction) mermaidModalCloseAction.addEventListener('click', closeMermaidModal);
+  if (mermaidModal) {
+    mermaidModal.addEventListener('click', (e) => {
+      if (e.target === mermaidModal) closeMermaidModal();
+    });
+  }
+
+  if (mermaidZoomInBtn) {
+    mermaidZoomInBtn.addEventListener('click', () => {
+      currentZoom = Math.min(3.5, Number((currentZoom + 0.2).toFixed(2)));
+      updateModalTransform();
+    });
+  }
+  if (mermaidZoomOutBtn) {
+    mermaidZoomOutBtn.addEventListener('click', () => {
+      currentZoom = Math.max(0.3, Number((currentZoom - 0.2).toFixed(2)));
+      updateModalTransform();
+    });
+  }
+  if (mermaidZoomResetBtn) {
+    mermaidZoomResetBtn.addEventListener('click', () => {
+      currentZoom = 1;
+      panX = 0;
+      panY = 0;
+      updateModalTransform();
+    });
+  }
+
+  if (mermaidModalBody) {
+    // Mouse wheel zoom
+    mermaidModalBody.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const delta = e.deltaY < 0 ? 0.15 : -0.15;
+      currentZoom = Math.max(0.3, Math.min(4.0, Number((currentZoom + delta).toFixed(2))));
+      updateModalTransform();
+    }, { passive: false });
+
+    // Drag to pan inside modal
+    mermaidModalBody.addEventListener('mousedown', (e) => {
+      isPanningModal = true;
+      modalStartX = e.clientX - panX;
+      modalStartY = e.clientY - panY;
+    });
+
+    window.addEventListener('mouseup', () => { isPanningModal = false; });
+
+    mermaidModalBody.addEventListener('mousemove', (e) => {
+      if (!isPanningModal) return;
+      e.preventDefault();
+      panX = e.clientX - modalStartX;
+      panY = e.clientY - modalStartY;
+      updateModalTransform();
+    });
+  }
+
   // Keyboard escape handler for modals/drawers
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       closeRawModal();
+      closeMermaidModal();
       closeMobileDrawer();
     }
   });

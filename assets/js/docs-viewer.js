@@ -425,6 +425,8 @@ document.addEventListener('DOMContentLoaded', () => {
       document.head.appendChild(script);
     });
     return mermaidLoadingPromise;
+  }
+
   function enableDragToScroll(container) {
     if (!container || container.dataset.dragEnabled) return;
     container.dataset.dragEnabled = '1';

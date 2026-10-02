@@ -34,6 +34,7 @@ def sync_config():
     version = config["project"]["version"]
     stage = config["project"]["releaseStage"]
     repo_url = config["github"]["repo"]
+    website_repo_url = config["github"].get("websiteRepo", "https://github.com/EG1DOTIN/av.eg1.in")
     issues_url = config["github"]["issues"]
     releases_url = config["github"]["releases"]
     contact_url = config["contact"]["url"]
@@ -73,6 +74,13 @@ def sync_config():
         content = re.sub(
             r'<!--\s*config:githubRepo\s*-->.*?<!--\s*/config:githubRepo\s*-->',
             f'<!-- config:githubRepo -->{repo_url}<!-- /config:githubRepo -->',
+            content,
+            flags=re.DOTALL
+        )
+
+        content = re.sub(
+            r'<!--\s*config:websiteRepo\s*-->.*?<!--\s*/config:websiteRepo\s*-->',
+            f'<!-- config:websiteRepo -->{website_repo_url}<!-- /config:websiteRepo -->',
             content,
             flags=re.DOTALL
         )
@@ -149,6 +157,16 @@ def sync_config():
         content = re.sub(
             r'(<a\s+[^>]*data-config="githubRepo"[^>]*href=")[^"]*(")',
             rf'\g<1>{repo_url}\g<2>',
+            content
+        )
+        content = re.sub(
+            r'(<a\s+[^>]*href=")[^"]*("[^>]*data-config="websiteRepo"[^>]*>)',
+            rf'\g<1>{website_repo_url}\g<2>',
+            content
+        )
+        content = re.sub(
+            r'(<a\s+[^>]*data-config="websiteRepo"[^>]*href=")[^"]*(")',
+            rf'\g<1>{website_repo_url}\g<2>',
             content
         )
         content = re.sub(

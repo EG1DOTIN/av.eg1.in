@@ -42,10 +42,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       }
 
-      // 3. GitHub Repo Link
+      // 3. GitHub App Repo Link
       if (config.github && config.github.repo) {
         document.querySelectorAll('a[data-config="githubRepo"]').forEach((el) => {
           el.href = config.github.repo;
+        });
+      }
+
+      // 3b. GitHub Website Repo Link
+      if (config.github && config.github.websiteRepo) {
+        document.querySelectorAll('a[data-config="websiteRepo"]').forEach((el) => {
+          el.href = config.github.websiteRepo;
         });
       }
 
@@ -508,4 +515,28 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  // 7. Opt-In Visitor Analytics Tracker (Batched Firestore Telemetry)
+  function initializeVisitorTracker() {
+    if (!document.querySelector('script[src*="visitor-tracker.js"]')) {
+      const script = document.createElement('script');
+      script.src = 'assets/js/visitor-tracker.js';
+      script.setAttribute('data-app', 'av.eg1.in');
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  }
+  initializeVisitorTracker();
+
+  // Reopen consent banner handler (accessible from footer or settings)
+  document.addEventListener('click', (e) => {
+    const target = e.target.closest('#btnReopenConsent, .reopen-consent-btn');
+    if (target) {
+      e.preventDefault();
+      if (window.EG1Tracker && typeof window.EG1Tracker.showConsentBanner === 'function') {
+        window.EG1Tracker.showConsentBanner();
+      }
+    }
+  });
 });
+

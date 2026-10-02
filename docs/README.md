@@ -74,6 +74,7 @@ av.eg1.in/
 │   │   └── desktop-preview.css  # Emulated native desktop window stylesheet
 │   ├── js/
 │   │   ├── main.js              # Client-side dynamic config injector & toggles
+│   │   ├── visitor-tracker.js   # Opt-in batched visitor analytics tracker
 │   │   ├── desktop-preview.js   # Interactive desktop mockup simulation engine
 │   │   ├── docs-data.js         # Compiled offline documentation data store
 │   │   └── docs-viewer.js       # Client-side Markdown documentation controller

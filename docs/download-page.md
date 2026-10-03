@@ -11,7 +11,7 @@ The Download page guides users through acquiring and setting up **pyEGClamUI** a
 
 > [!IMPORTANT]
 > **Single Source of Truth & Beta Placement Constraint**:
-> - The release version and stage are synchronized from [site-config.json](../site-config.json).
+> - The baseline release version and stage are initialized from [site-config.json](../site-config.json) and dynamically kept in sync with the latest published GitHub release at runtime by `assets/js/main.js`.
 > - As mandated by project rules, the **"Beta Release"** badge is displayed **only on this page**, adjacent to the primary download banner. It must never appear on the homepage, navigation bar, footer, or other pages.
 
 ---
@@ -44,13 +44,18 @@ flowchart TD
 
 ## 💾 Standalone Desktop Binaries (Direct Downloads)
 
-Standalone single-click packages with bundled assets and dependencies are continuously published via automated GitHub Actions CI/CD workflows:
+Standalone single-click packages with bundled assets and dependencies are continuously published via automated GitHub Actions CI/CD workflows and automatically mapped in real-time on this page using the GitHub Releases API engine in [assets/js/main.js](../assets/js/main.js):
 
 | Platform | Package File | Format | Direct Download Link |
 | :--- | :--- | :--- | :--- |
-| **Windows (64-bit)** | `pyegclamui-windows-x64.zip` | Standalone Portable ZIP | [Download Windows (.zip)](https://github.com/EG1DOTIN/pyEGClamUI/releases/latest/download/pyegclamui-windows-x64.zip) |
+| **Windows 10/11 (Installer)** | `pyegclamui-setup-x64.exe` | Standalone Inno Setup Installer | [Download Installer (.exe)](https://github.com/EG1DOTIN/pyEGClamUI/releases/latest/download/pyegclamui-setup-x64.exe) |
+| **Windows 10/11 (Portable)** | `pyegclamui-windows-x64.zip` | Standalone Portable ZIP Archive | [Download Portable (.zip)](https://github.com/EG1DOTIN/pyEGClamUI/releases/latest/download/pyegclamui-windows-x64.zip) |
 | **Linux (x86_64)** | `pyegclamui-linux-x86_64.tar.gz` | Standalone Gzip Tarball | [Download Linux (.tar.gz)](https://github.com/EG1DOTIN/pyEGClamUI/releases/latest/download/pyegclamui-linux-x86_64.tar.gz) |
 | **macOS (Universal)** | `pyegclamui-macos.zip` | Standalone ZIP Archive | [Download macOS (.zip)](https://github.com/EG1DOTIN/pyEGClamUI/releases/latest/download/pyegclamui-macos.zip) |
+| **Security Checksum** | `SHA256SUMS.txt` | Cryptographic SHA-256 Hashes | [Download SHA256SUMS.txt](https://github.com/EG1DOTIN/pyEGClamUI/releases/latest/download/SHA256SUMS.txt) |
+
+### Automated Client-Side Binding
+Download cards and buttons on [download.html](../download.html) utilize `data-gh-download` hooks (`win_installer`, `win_portable`, `linux`, `mac`, `sha256`). On page load, `main.js` automatically binds the live release URLs, asset filenames, and formatted file sizes directly from the GitHub Releases API.
 
 ---
 

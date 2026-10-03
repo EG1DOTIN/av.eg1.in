@@ -130,6 +130,20 @@ DOC_METADATA = {
         "badge": "Security",
         "order": 33,
     },
+    "docs/DEVELOPMENT_WORKFLOW.md": {
+        "id": "development-workflow",
+        "title": "Development Workflow & Release Engineering",
+        "category": "Reference & Hardening",
+        "badge": "DevOps",
+        "order": 34,
+    },
+    "docs/VERSIONING.md": {
+        "id": "versioning",
+        "title": "Application Versioning & Release Guide",
+        "category": "Reference & Hardening",
+        "badge": "SemVer",
+        "order": 35,
+    },
 }
 
 def extract_heading_title(content: str, fallback: str) -> str:

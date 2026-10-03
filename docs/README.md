@@ -11,10 +11,11 @@ This directory contains page-wise specifications, design systems, data flow mode
 | Documentation File | Target Page / Area | Core Focus |
 | :--- | :--- | :--- |
 | [index-page.md](index-page.md) | [index.html](../index.html) | Portal landing page, hero value proposition, security highlights, CTA funnel |
+| [documentation-page.md](documentation-page.md) | [documentation.html](../documentation.html) | Technical docs portal, live GitHub Raw sync, session caching, lazy Mermaid, Prism syntax |
 | [ui-preview-page.md](ui-preview-page.md) | [ui-preview.html](../ui-preview.html) & [ui-preview.html](ui-preview.html) | Browser-based interactive desktop UI prototype, state matrix, modal simulations |
 | [download-page.md](download-page.md) | [download.html](../download.html) | Multi-platform package manager installation, system prerequisites, release badge |
 | [getting-started-page.md](getting-started-page.md) | [getting-started.html](../getting-started.html) | Operations manual, first-run wizard, quarantine management, troubleshooting |
-| [updates-page.md](updates-page.md) | [updates.html](../updates.html) | Release history, version changelogs, platform binaries timeline |
+| [updates-page.md](updates-page.md) | [updates.html](../updates.html) | Release history, automated GitHub Releases API engine, live platform binaries timeline |
 | [how-to-use-page.md](how-to-use-page.md) | [how-to-use.html](../how-to-use.html) | Backward-compatible redirect alias pointing to Getting Started |
 | [about-page.md](about-page.md) | [about.html](../about.html) | Open-source philosophy, Cisco ClamAV® trademark attribution, GPL-3.0, FAQ |
 | [GITHUB_ACTIONS_DOCS_SYNC.md](GITHUB_ACTIONS_DOCS_SYNC.md) | [.github/workflows/deploy.yml](../.github/workflows/deploy.yml) | Documentation build automation, cross-repo webhook dispatch & CI/CD architecture |
@@ -76,17 +77,18 @@ av.eg1.in/
 │   │   ├── main.js              # Client-side dynamic config injector & toggles
 │   │   ├── visitor-tracker.js   # Opt-in batched visitor analytics tracker
 │   │   ├── desktop-preview.js   # Interactive desktop mockup simulation engine
-│   │   ├── docs-data.js         # Compiled offline documentation data store
-│   │   └── docs-viewer.js       # Client-side Markdown documentation controller
+│   │   ├── docs-data.js         # Compiled offline documentation data store (18 guides)
+│   │   └── docs-viewer.js       # Markdown docs controller (live GitHub sync & lazy Mermaid)
 │   ├── data/
-│   │   └── updates.json         # Release history and download packages schema
+│   │   └── updates.json         # Legacy offline schema (live releases synced via GitHub API)
 │   ├── vendor/                  # Offline runtime libraries (marked, prism, mermaid)
 │   └── images/                  # Production brand logos, icons, and SEO cards
-├── docs/                        # Architecture & page specifications
-├── pyEGClamUI-Docs/             # Upstream application technical documentation suite (16 guides)
+├── docs/                        # Architecture & page specifications (9 developer guides)
+├── pyEGClamUI-Docs/             # Upstream application technical documentation suite (18 guides)
 ├── automation-scripts/          # Maintenance, audit, and build tools
 │   ├── sync_site_config.py      # Synchronize version metadata from site-config.json
 │   ├── sync_components.py       # Synchronize header/footer partials across pages
+│   ├── sync_docs_from_github.py # Pull latest documentation suite from GitHub main branch
 │   ├── build_docs_data.py       # Compile pyEGClamUI-Docs into assets/js/docs-data.js
 │   ├── download_vendor_assets.py # Vendor offline runtime libraries
 │   └── audit_website_links.py   # Zero-broken-link audit gate (100% verified)
@@ -97,15 +99,21 @@ av.eg1.in/
 
 ---
 
-## ⚙️ Global Configuration Model (`site-config.json`)
+## ⚙️ Global Configuration Model & Automated Runtime Sync
 
-All version numbers, repository links, contact endpoints, and package commands are centralized in [site-config.json](../site-config.json). Dynamic updates are processed client-side via [assets/js/main.js](../assets/js/main.js), while static markers are synchronized by [automation-scripts/sync_site_config.py](../automation-scripts/sync_site_config.py).
+The website combines an offline baseline with a **dynamic runtime GitHub synchronization layer**:
+
+1. **Offline Baseline (`site-config.json`)**: Contains baseline project metadata, repository links, and contact endpoints for offline resilience, initial HTML rendering, and SEO crawlers.
+2. **Dynamic Runtime GitHub Sync (`assets/js/main.js`)**: When visitors load any page on the portal, `main.js` queries `https://api.github.com/repos/EG1DOTIN/pyEGClamUI/releases` (cached for 15 minutes). The latest release tag, publication date, download assets, and changelog are dynamically resolved and automatically injected into all `[data-config="version"]`, `[data-config="releaseDate"]`, and `[data-gh-download]` elements across the entire website.
+3. **Dynamic Documentation Sync (`assets/js/docs-viewer.js`)**: When visitors browse [documentation.html](../documentation.html), the viewer dynamically fetches the latest live Markdown files directly from `raw.githubusercontent.com/EG1DOTIN/pyEGClamUI/main/`.
+
+Whenever a new version or document update is pushed to GitHub, the live website automatically reflects the new version and content without requiring manual code changes.
 
 ```json
 {
   "project": {
     "name": "pyEGClamUI",
-    "version": "3.0.0",
+    "version": "<dynamic_from_github_releases>",
     "releaseStage": "Beta Release",
     "tagline": "An Open-Source, Cross-Platform Desktop GUI for ClamAV",
     "license": "GNU GPL-3.0"
@@ -114,11 +122,6 @@ All version numbers, repository links, contact endpoints, and package commands a
     "repo": "https://github.com/EG1DOTIN/pyEGClamUI",
     "issues": "https://github.com/EG1DOTIN/pyEGClamUI/issues",
     "releases": "https://github.com/EG1DOTIN/pyEGClamUI/releases"
-  },
-  "contact": {
-    "url": "https://www.eg1.in/contact",
-    "privacyPolicy": "https://eg1.in/privacypolicy.html",
-    "officialSite": "https://eg1.in"
   }
 }
 ```

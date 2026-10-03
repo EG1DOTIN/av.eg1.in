@@ -1,13 +1,23 @@
 {
-  "lastUpdated": "2026-09-30",
+  "lastUpdated": "2026-10-03",
   "updates": [
+    {
+      "id": "v3-1-0",
+      "version": "3.1.0",
+      "title": "pyEGClamUI v3.1.0 Released",
+      "date": "October 3, 2026",
+      "badge": "Latest Release",
+      "badgeType": "emerald",
+      "summary": "Official Windows Inno Setup standalone installation suite, centric hidden process runner eliminating console flashes, non-blocking asynchronous GUI lifecycle eliminating UI freezes, and multi-OS CI/CD packaging.",
+      "link": "updates.html#v3-1-0"
+    },
     {
       "id": "v3-0-0",
       "version": "3.0.0",
       "title": "pyEGClamUI v3.0.0 Released",
       "date": "September 30, 2026",
-      "badge": "Latest Release",
-      "badgeType": "emerald",
+      "badge": "Release",
+      "badgeType": "sky",
       "summary": "Major cross-platform release featuring ready-to-run standalone desktop binaries for Windows (.exe), Linux (AppImage & Tarball), and macOS (.dmg), automated PowerShell & Bash one-liner setup scripts, full native ClamAV engine control with live scan progress streaming, and a high-performance dark cybersecurity UI.",
       "link": "updates.html#v3-0-0"
     },

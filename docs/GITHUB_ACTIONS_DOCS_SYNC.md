@@ -6,27 +6,46 @@ This document describes how technical documentation is maintained, synchronized,
 
 ## 1. Architectural Overview
 
-The documentation system uses an ahead-of-time (AOT) build compilation strategy. All Markdown files located in [`../pyEGClamUI-Docs/`](../pyEGClamUI-Docs/) are compiled by [`../automation-scripts/build_docs_data.py`](../automation-scripts/build_docs_data.py) into a self-contained, offline-resilient JavaScript bundle: [`../assets/js/docs-data.js`](../assets/js/docs-data.js).
+The documentation system uses a **hybrid real-time & ahead-of-time (AOT)** architecture:
 
-When visitors browse [documentation.html](../documentation.html), the page renders instantaneously (<10ms) without making runtime calls to GitHub API or external CDNs, completely bypassing rate limits.
+1. **Client-Side Live GitHub Sync**: In [assets/js/docs-viewer.js](../assets/js/docs-viewer.js), visiting [documentation.html](../documentation.html) automatically queries the live `raw.githubusercontent.com` repository endpoint. Whenever code and documentation updates are committed to the `main` branch of `EG1DOTIN/pyEGClamUI`, website visitors immediately see the latest documentation without waiting for website redeployment. Results are cached in `sessionStorage` (15-minute TTL) for zero latency.
+2. **Ahead-of-Time Offline Bundle**: All 18 Markdown files in [`../pyEGClamUI-Docs/`](../pyEGClamUI-Docs/) are synchronized and compiled by [`../automation-scripts/sync_docs_from_github.py`](../automation-scripts/sync_docs_from_github.py) and [`../automation-scripts/build_docs_data.py`](../automation-scripts/build_docs_data.py) into an offline-resilient JavaScript bundle: [`../assets/js/docs-data.js`](../assets/js/docs-data.js). This guarantees seamless offline browsing, fast initial loads, and search engine indexability.
 
 ```mermaid
 flowchart TD
     subgraph AppRepo["Python App Repository (pyEGClamUI)"]
         direction TB
-        AppDocs["docs/ and README.md"]
+        AppDocs["docs/ and README.md (18 Guides)"]
         AppTrigger["Workflow: notify-website.yml"]
+        RawEndpoint["raw.githubusercontent.com (main branch)"]
         AppDocs -->|"Git Push"| AppTrigger
+        AppDocs -->|"Direct Branch Push"| RawEndpoint
     end
 
-    subgraph WebRepo["Website Repository (av.eg1.in)"]
+    subgraph ClientBrowser["Visitor Browser (av.eg1.in)"]
+        direction TB
+        Viewer["docs-viewer.js Controller"]
+        SessionCache{"Check sessionStorage (15-min TTL)"}
+        LiveFetch["Fetch Live Raw Markdown from GitHub"]
+        FallbackStore["Pre-bundled assets/js/docs-data.js"]
+        
+        Viewer --> SessionCache
+        SessionCache -->|"Cache Miss / Expired"| LiveFetch
+        LiveFetch -->|"Online Success"| RenderLive["Render Live Markdown Content from GitHub"]
+        LiveFetch -->|"Offline / Network Failure"| FallbackStore
+        SessionCache -->|"Cache Hit"| RenderLive
+        FallbackStore --> RenderOffline["Render Offline Fallback Content"]
+    end
+
+    RawEndpoint -.->|"CORS Enabled Fetch"| LiveFetch
+
+    subgraph WebRepo["Website Repository CI/CD (av.eg1.in)"]
         direction TB
         DispatchEvent{"Trigger Source"}
         LocalDocs["pyEGClamUI-Docs/"]
         WebWorkflow[".github/workflows/deploy.yml"]
         Compiler["build_docs_data.py"]
         Store["assets/js/docs-data.js"]
-        LiveSite["documentation.html (av.eg1.in)"]
 
         DispatchEvent -->|"repository_dispatch event"| WebWorkflow
         DispatchEvent -->|"push to main/master"| WebWorkflow
@@ -35,7 +54,6 @@ flowchart TD
         WebWorkflow -->|"Fetches latest docs"| LocalDocs
         LocalDocs --> Compiler
         Compiler --> Store
-        Store --> LiveSite
     end
 
     AppTrigger -->|"Repository Dispatch Webhook"| DispatchEvent
@@ -124,31 +142,41 @@ jobs:
 
 You can verify the documentation compilation pipeline locally at any time without waiting for GitHub Actions:
 
+### Synchronize Documentation from GitHub
+Fetch all markdown files directly from GitHub `main` branch into `pyEGClamUI-Docs/` and compile the data store:
+```bash
+python automation-scripts/sync_docs_from_github.py
+```
+
+Expected output:
+```text
+Connecting to GitHub API to discover repository documents...
+Found 19 documentation assets on GitHub 'main' branch.
+...
+Successfully synchronized 19/19 assets to .../pyEGClamUI-Docs
+Compiling assets/js/docs-data.js from updated documentation files...
+Found 18 markdown files.
+Successfully generated docs data store: .../assets/js/docs-data.js
+  Total documents compiled: 18
+  Total link aliases mapped: 120
+```
+
 ### Build Documentation Bundle
 Run using Python in your local terminal:
 ```bash
 python automation-scripts/build_docs_data.py
 ```
 
-Expected output:
-```text
-Scanning help documents in .../pyEGClamUI-Docs...
-Found 16 markdown files.
-Successfully generated docs data store: .../assets/js/docs-data.js
-  Total documents compiled: 16
-  Total link aliases mapped: 106
-```
-
 ### Audit Website Links
-Verify that all 150+ internal links and assets remain 100% valid:
+Verify that all 179 internal links and assets remain 100% valid:
 ```bash
 python automation-scripts/audit_website_links.py
 ```
 
 Expected output:
 ```text
-Auditing 7 HTML files in ...
-Total internal links/assets checked: 156
+Auditing 8 HTML files in ...
+Total internal links/assets checked: 179
 SUCCESS: All internal links and asset references are valid!
 ```
 
@@ -159,7 +187,8 @@ SUCCESS: All internal links and asset references are valid!
 | File Path | Description |
 | :--- | :--- |
 | [`.github/workflows/deploy.yml`](../.github/workflows/deploy.yml) | Website CI/CD GitHub Actions workflow for validating, compiling, auditing, and deploying the portal. |
+| [`../automation-scripts/sync_docs_from_github.py`](../automation-scripts/sync_docs_from_github.py) | Python tool that pulls latest markdown files from GitHub repository main branch. |
 | [`../automation-scripts/build_docs_data.py`](../automation-scripts/build_docs_data.py) | Python generator script that compiles Markdown documents into JSON store. |
 | [`../assets/js/docs-data.js`](../assets/js/docs-data.js) | Compiled JavaScript document data store loaded by the viewer. |
-| [`../assets/js/docs-viewer.js`](../assets/js/docs-viewer.js) | Client-side viewer controller handling TOC, navigation, search, and Markdown rendering. |
-| [`../pyEGClamUI-Docs/`](../pyEGClamUI-Docs/) | The authoritative source Markdown documents suite (16 technical guides). |
+| [`../assets/js/docs-viewer.js`](../assets/js/docs-viewer.js) | Client-side viewer controller handling live GitHub fetching, TOC, navigation, search, and Markdown rendering. |
+| [`../pyEGClamUI-Docs/`](../pyEGClamUI-Docs/) | The authoritative source Markdown documents suite (18 technical guides). |

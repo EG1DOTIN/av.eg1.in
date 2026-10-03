@@ -143,9 +143,13 @@ document.addEventListener('DOMContentLoaded', () => {
         ? 'pyEGClamUI-Docs/' + href
         : (href.startsWith('pyEGClamUI-Docs/docs/') ? href.replace('pyEGClamUI-Docs/', '') : href);
 
+      const rawGhSrc = !/^https?:\/\/|^\/\/|^data:/i.test(href)
+        ? `https://raw.githubusercontent.com/EG1DOTIN/pyEGClamUI/main/${href.replace(/^\.\//, '')}`
+        : '';
+
       return `
         <figure class="docs-image-figure">
-          <img src="${resolvedSrc}"${altAttr}${titleAttr} class="docs-image" loading="lazy" onerror="if(!this.dataset.triedFallback){this.dataset.triedFallback='1';this.src='${fallbackSrc}';}">
+          <img src="${resolvedSrc}"${altAttr}${titleAttr} class="docs-image" loading="lazy" onerror="if(!this.dataset.triedFallback){this.dataset.triedFallback='1';this.src='${fallbackSrc}';}else if('${rawGhSrc}'&&!this.dataset.triedGh){this.dataset.triedGh='1';this.src='${rawGhSrc}';}">
         </figure>
       `;
     };
@@ -522,17 +526,72 @@ document.addEventListener('DOMContentLoaded', () => {
     if (breadcrumbCurrent) breadcrumbCurrent.textContent = docData.title;
     if (breadcrumbCategory) breadcrumbCategory.textContent = docData.category;
 
-    // Determine markdown content: try live fetch if on web server, fallback to bundled data
+    // Determine markdown content:
+    // Tier 1: Check sessionStorage cache (15-min TTL for instant snappy browsing)
+    // Tier 2: Live fetch directly from GitHub repository main branch (always up to date with pipelines)
+    // Tier 3: Web server local pyEGClamUI-Docs/ fallback
+    // Tier 4: Pre-bundled offline docData.content from docs-data.js
     let rawMarkdown = docData.content;
-    if (window.location.protocol.startsWith('http')) {
-      try {
-        const fetchUrl = `pyEGClamUI-Docs/${docData.filename}?t=${Date.now()}`;
-        const resp = await fetch(fetchUrl);
-        if (resp.ok) {
-          rawMarkdown = await resp.text();
+    const DOC_CACHE_TTL = 15 * 60 * 1000; // 15 minutes
+    const cacheKey = `pyeg_gh_doc_${docId}`;
+    let cachedMarkdown = null;
+
+    try {
+      const stored = sessionStorage.getItem(cacheKey);
+      if (stored) {
+        const item = JSON.parse(stored);
+        if (item && item.timestamp && (Date.now() - item.timestamp < DOC_CACHE_TTL) && item.content) {
+          cachedMarkdown = item.content;
         }
-      } catch (err) {
-        // Fallback silently to pre-bundled data
+      }
+    } catch (e) {
+      // Ignore storage errors
+    }
+
+    if (cachedMarkdown) {
+      rawMarkdown = cachedMarkdown;
+    } else {
+      let fetchedSuccessfully = false;
+
+      // Tier 2: Live GitHub Raw fetch
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 6000);
+        const ghRawUrl = `https://raw.githubusercontent.com/EG1DOTIN/pyEGClamUI/main/${docData.filename}`;
+        const resp = await fetch(ghRawUrl, { signal: controller.signal });
+        clearTimeout(timeoutId);
+
+        if (resp.ok) {
+          const liveText = await resp.text();
+          if (liveText && liveText.trim().length > 0) {
+            rawMarkdown = liveText;
+            fetchedSuccessfully = true;
+            try {
+              sessionStorage.setItem(cacheKey, JSON.stringify({
+                content: liveText,
+                timestamp: Date.now()
+              }));
+            } catch (storageErr) {
+              // Ignore sessionStorage quota
+            }
+          }
+        }
+      } catch (ghErr) {
+        console.debug('GitHub raw live documentation fetch fallback:', ghErr);
+      }
+
+      // Tier 3: Local server pyEGClamUI-Docs/ fallback
+      if (!fetchedSuccessfully && window.location.protocol.startsWith('http')) {
+        try {
+          const fetchUrl = `pyEGClamUI-Docs/${docData.filename}?t=${Date.now()}`;
+          const resp = await fetch(fetchUrl);
+          if (resp.ok) {
+            rawMarkdown = await resp.text();
+            fetchedSuccessfully = true;
+          }
+        } catch (err) {
+          // Fallback silently to Tier 4 pre-bundled data
+        }
       }
     }
 

@@ -33,6 +33,7 @@ def sync_config():
     config = load_config()
     version = config["project"]["version"]
     stage = config["project"]["releaseStage"]
+    release_date = config["project"].get("releaseDate", "")
     repo_url = config["github"]["repo"]
     website_repo_url = config["github"].get("websiteRepo", "https://github.com/EG1DOTIN/av.eg1.in")
     issues_url = config["github"]["issues"]
@@ -69,6 +70,15 @@ def sync_config():
             content,
             flags=re.DOTALL
         )
+
+        # 2b. Update release date markers: <!-- config:releaseDate -->...<!-- /config:releaseDate -->
+        if release_date:
+            content = re.sub(
+                r'<!--\s*config:releaseDate\s*-->.*?<!--\s*/config:releaseDate\s*-->',
+                f'<!-- config:releaseDate -->{release_date}<!-- /config:releaseDate -->',
+                content,
+                flags=re.DOTALL
+            )
 
         # 3. Update GitHub Repo markers / URLs
         content = re.sub(

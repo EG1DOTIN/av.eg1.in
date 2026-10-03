@@ -132,54 +132,112 @@
           <h1 class="page-title">Updates &amp; Release History</h1>
         </div>
 
-        <!-- Latest Release: v3.0.0 -->
-        <div class="feature-card"
-          style="border-color: rgba(0, 220, 130, 0.35); padding: var(--space-6); margin-bottom: var(--space-8);">
-          <div
-            style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: var(--space-2); margin-bottom: var(--space-4); border-bottom: 1px solid var(--border-subtle); padding-bottom: var(--space-4);">
-            <div>
-              <div style="display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-1);">
-                <h2 style="margin: 0; font-size: var(--text-xl); font-weight: 700; color: var(--text-primary);">
-                  pyEGClamUI v<span data-config="version"><!-- config:version -->3.0.0<!-- /config:version --></span>
-                </h2>
-                <span class="badge badge-emerald">Latest Release</span>
+        <!-- Dynamic GitHub Releases Feed with Semantic Fallback -->
+        <div id="githubReleasesFeed" class="releases-feed">
+          <!-- Latest Release: v3.1.0 -->
+          <div class="feature-card" id="v3-1-0"
+            style="border-color: rgba(0, 220, 130, 0.45); padding: var(--space-6); margin-bottom: var(--space-8); box-shadow: 0 4px 20px rgba(0, 220, 130, 0.08);">
+            <div
+              style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: var(--space-2); margin-bottom: var(--space-4); border-bottom: 1px solid var(--border-subtle); padding-bottom: var(--space-4);">
+              <div>
+                <div style="display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-1);">
+                  <h2 style="margin: 0; font-size: var(--text-xl); font-weight: 700; color: var(--text-primary);">
+                    pyEGClamUI v<span data-config="version"><!-- config:version -->3.1.0<!-- /config:version --></span>
+                  </h2>
+                  <span class="badge badge-emerald">Latest Release</span>
+                </div>
+                <div style="font-size: var(--text-xs); color: var(--text-muted);">
+                  Released: <span data-config="releaseDate"><!-- config:releaseDate -->October 2026<!-- /config:releaseDate --></span> &bull; Performance &amp; Non-Blocking GUI Suite
+                </div>
               </div>
-              <div style="font-size: var(--text-xs); color: var(--text-muted);">
-                Released: <span data-config="releaseDate"><!-- config:releaseDate -->September
-                  2026<!-- /config:releaseDate --></span> &bull; Full Cross-Platform Desktop Support
+              <div>
+                <a href="https://github.com/EG1DOTIN/pyEGClamUI/releases/tag/v3.1.0" target="_blank" rel="noopener noreferrer"
+                  class="btn btn-secondary btn-sm">
+                  View on GitHub &rarr;
+                </a>
+              </div>
+            </div>
+
+            <h3
+              style="font-size: var(--text-sm); font-weight: 700; color: var(--text-primary); letter-spacing: 0.05em; margin-bottom: var(--space-3);">
+              Key Highlights in v3.1.0:
+            </h3>
+
+            <ul
+              style="font-size: var(--text-sm); color: var(--text-secondary); line-height: 1.7; padding-left: 1.25rem; margin: 0 0 var(--space-5) 0; display: flex; flex-direction: column; gap: var(--space-2);">
+              <li><strong>Native Inno Setup Windows Suite</strong>: Standalone installer (<code>pyEGClamUI.exe</code>) with bundled Python 3.12 embedded runtime, automated ClamAV provisioning, and self-elevating ClamD service activator.</li>
+              <li><strong>Centric Hidden Process Foundation</strong>: Eliminates all console window pops and command-prompt flashing across scans, updates, and engine commands using <code>CREATE_NO_WINDOW</code>.</li>
+              <li><strong>Non-Blocking Asynchronous GUI Lifecycle</strong>: Offloads heavy engine audits and health checks to background worker threads (<code>StatusRefreshWorker</code>), permanently eliminating UI titlebar freezes.</li>
+              <li><strong>In-Memory TTL Caching</strong>: Instant tab switching via 6-second caching in engine detector and 0.5s socket connect timeouts.</li>
+              <li><strong>Automated Multi-OS CI/CD Pipelines</strong>: GitHub Actions packaging workflows for Windows, Linux, and macOS with 125/125 passing automated unit &amp; regression tests.</li>
+            </ul>
+
+            <div style="background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-3) var(--space-4); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--space-3);">
+              <span style="font-size: var(--text-xs); color: var(--text-muted); font-weight: 600;">Download Binaries (v3.1.0):</span>
+              <div style="display: flex; flex-wrap: wrap; gap: var(--space-2);">
+                <a href="https://github.com/EG1DOTIN/pyEGClamUI/releases/latest/download/pyEGClamUI.exe" class="badge badge-emerald" style="text-decoration: none; padding: 4px 8px;" target="_blank" rel="noopener noreferrer">Windows Installer (.exe)</a>
+                <a href="https://github.com/EG1DOTIN/pyEGClamUI/releases/latest/download/pyegclamui-v3.1.0-windows-x64.zip" class="badge badge-sky" style="text-decoration: none; padding: 4px 8px;" target="_blank" rel="noopener noreferrer">Windows (.zip)</a>
+                <a href="https://github.com/EG1DOTIN/pyEGClamUI/releases/latest/download/pyegclamui-v3.1.0-linux-x86_64.tar.gz" class="badge badge-sky" style="text-decoration: none; padding: 4px 8px;" target="_blank" rel="noopener noreferrer">Linux (.tar.gz)</a>
+                <a href="https://github.com/EG1DOTIN/pyEGClamUI/releases/latest/download/pyegclamui-v3.1.0-macos-arm64.zip" class="badge badge-sky" style="text-decoration: none; padding: 4px 8px;" target="_blank" rel="noopener noreferrer">macOS (.zip)</a>
+                <a href="https://github.com/EG1DOTIN/pyEGClamUI/releases/latest/download/SHA256SUMS.txt" class="badge" style="background: rgba(255,255,255,0.06); text-decoration: none; padding: 4px 8px;" target="_blank" rel="noopener noreferrer">Checksums</a>
               </div>
             </div>
           </div>
 
-          <h3
-            style="font-size: var(--text-sm); font-weight: 700; color: var(--text-primary); letter-spacing: 0.05em; margin-bottom: var(--space-3);">
-            Key Highlights in v3.0.0:
-          </h3>
+          <!-- Previous Release: v3.0.0 -->
+          <div class="feature-card" id="v3-0-0"
+            style="border-color: var(--border-subtle); padding: var(--space-6); margin-bottom: var(--space-8);">
+            <div
+              style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: var(--space-2); margin-bottom: var(--space-4); border-bottom: 1px solid var(--border-subtle); padding-bottom: var(--space-4);">
+              <div>
+                <div style="display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-1);">
+                  <h2 style="margin: 0; font-size: var(--text-xl); font-weight: 700; color: var(--text-primary);">
+                    pyEGClamUI v3.0.0
+                  </h2>
+                  <span class="badge badge-sky">Release</span>
+                </div>
+                <div style="font-size: var(--text-xs); color: var(--text-muted);">
+                  Released: September 2026 &bull; Initial Production Release
+                </div>
+              </div>
+              <div>
+                <a href="https://github.com/EG1DOTIN/pyEGClamUI/releases/tag/v3.0.0" target="_blank" rel="noopener noreferrer"
+                  class="btn btn-secondary btn-sm">
+                  View on GitHub &rarr;
+                </a>
+              </div>
+            </div>
 
-          <ul
-            style="font-size: var(--text-sm); color: var(--text-secondary); line-height: 1.7; padding-left: 1.25rem; margin: 0; display: flex; flex-direction: column; gap: var(--space-2);">
-            <li><strong>Cross-Platform</strong>: Runs natively on Windows 10/11, Linux, and macOS.</li>
-            <li><strong>Engine Auto-Discovery</strong>: Automatically detects <code>clamscan</code>,
-              <code>clamd</code>, and <code>freshclam</code> across system PATH and standard directories.</li>
-            <li><strong>ClamAV Daemon Integration</strong>: Communicates via Unix domain socket or TCP socket using
-              standard <code>INSTREAM</code> chunk framing.</li>
-            <li><strong>Multiple Scan Modes</strong>: Quick scan, full system scan, custom folder scan, and memory scan
-              for active processes.</li>
-            <li><strong>Live Progress Tracking in Scanning</strong>: Displays real-time file counters, active scanning
-              paths, elapsed time, and threat notifications.</li>
-            <li><strong>Isolated Quarantine Vault</strong>: Isolates detected files with unique IDs, SHA-256 hashes, and
-              non-executable <code>.quarantine</code> extensions, with one-click restoration.</li>
-            <li><strong>Debounced Real-Time Guard</strong>: Monitors Downloads and Desktop folders using <code>watchdog</code>
-              with a debounce queue to avoid locking files during writes.</li>
-            <li><strong>Desktop &amp; Menu Integration</strong>: Integrates with Linux application menus (XDG), macOS Menu
-              Bar, and Windows System Tray.</li>
-            <li><strong>FreshClam Updates</strong>: Check and update ClamAV virus signatures directly from the UI without
-              requiring elevated permissions.</li>
-            <li><strong>Dark Theme</strong>: Clean vector icons with native dark titlebar frame integration (Windows DWM,
-              Linux GTK, and macOS).</li>
-            <li><strong>Lightweight &amp; Privacy-Focused</strong>: Zero telemetry, zero tracking, no network beacons,
-              and 100% free and open-source (GPL-3.0).</li>
-          </ul>
+            <h3
+              style="font-size: var(--text-sm); font-weight: 700; color: var(--text-primary); letter-spacing: 0.05em; margin-bottom: var(--space-3);">
+              Key Highlights in v3.0.0:
+            </h3>
+
+            <ul
+              style="font-size: var(--text-sm); color: var(--text-secondary); line-height: 1.7; padding-left: 1.25rem; margin: 0; display: flex; flex-direction: column; gap: var(--space-2);">
+              <li><strong>Cross-Platform</strong>: Runs natively on Windows 10/11, Linux, and macOS.</li>
+              <li><strong>Engine Auto-Discovery</strong>: Automatically detects <code>clamscan</code>,
+                <code>clamd</code>, and <code>freshclam</code> across system PATH and standard directories.</li>
+              <li><strong>ClamAV Daemon Integration</strong>: Communicates via Unix domain socket or TCP socket using
+                standard <code>INSTREAM</code> chunk framing.</li>
+              <li><strong>Multiple Scan Modes</strong>: Quick scan, full system scan, custom folder scan, and memory scan
+                for active processes.</li>
+              <li><strong>Live Progress Tracking</strong>: Displays real-time file counters, active scanning
+                paths, elapsed time, and threat notifications.</li>
+              <li><strong>Isolated Quarantine Vault</strong>: Isolates detected files with unique IDs, SHA-256 hashes, and
+                non-executable <code>.quarantine</code> extensions, with one-click restoration.</li>
+              <li><strong>Debounced Real-Time Guard</strong>: Monitors Downloads and Desktop folders using <code>watchdog</code>
+                with a debounce queue to avoid locking files during writes.</li>
+              <li><strong>Desktop &amp; Menu Integration</strong>: Integrates with Linux application menus (XDG), macOS Menu
+                Bar, and Windows System Tray.</li>
+              <li><strong>FreshClam Updates</strong>: Check and update ClamAV virus signatures directly from the UI without
+                requiring elevated permissions.</li>
+              <li><strong>Dark Theme</strong>: Clean vector icons with native dark titlebar frame integration (Windows DWM,
+                Linux GTK, and macOS).</li>
+              <li><strong>Lightweight &amp; Privacy-Focused</strong>: Zero telemetry, zero tracking, no network beacons,
+                and 100% free and open-source (GPL-3.0).</li>
+            </ul>
+          </div>
         </div>
 
         <!-- Milestones & Packaging Architecture -->

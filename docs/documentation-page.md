@@ -21,18 +21,14 @@ The portal is designed for maximum speed, accessibility (WCAG AA), responsive fl
 ```mermaid
 flowchart TD
     User["Visitor navigates to documentation.html?doc=id"] --> ResolveRoute["Resolve Route & Target Document ID"]
-    ResolveRoute --> CheckSession{"Check sessionStorage Cache (15-min TTL)"}
+    ResolveRoute --> CheckCache{"sessionStorage Cache or docs-data.js"}
     
-    CheckSession -->|"Cache Valid"| ParseMD["Parse Markdown via marked.js"]
-    CheckSession -->|"Cache Miss / Expired"| LiveFetch["Fetch from raw.githubusercontent.com"]
+    CheckCache -->|"Render Instantly (0ms)"| ParseMD["Parse Markdown via marked.js"]
+    ResolveRoute -->|"Non-Blocking"| LiveFetch["Background Fetch raw.githubusercontent.com"]
     
-    LiveFetch -->|"200 OK (CORS Approved)"| StoreSession["Save in sessionStorage (15-min TTL)"]
-    StoreSession --> ParseMD
-    
-    LiveFetch -->|"Offline / Network Failure"| LocalServer{"Fetch pyEGClamUI-Docs/ on Web Server"}
-    LocalServer -->|"Server OK"| ParseMD
-    LocalServer -->|"Offline"| OfflineStore["Use Pre-bundled docData.content in docs-data.js"]
-    OfflineStore --> ParseMD
+    LiveFetch -->|"200 OK (New Content)"| UpdateSession["Update sessionStorage & In-Place Re-Render"]
+    LiveFetch -->|"Unchanged / Network Offline"| KeepCurrent["Keep Pre-rendered Content"]
+    UpdateSession --> ParseMD
     
     ParseMD --> TransformAlerts["Transform GitHub Alert Callouts: [!NOTE], [!TIP]"]
     TransformAlerts --> PrismCode["Apply Prism.js Code Syntax Highlighting"]
@@ -51,14 +47,14 @@ flowchart TD
 
 ## 📑 Core Features & Subsystems
 
-### 1. Hybrid Live/Offline Data Architecture
-- **Instant GitHub Pipeline Sync**: Whenever changes are pushed to `main` in `EG1DOTIN/pyEGClamUI`, the browser's dynamic fetch engine automatically pulls the live markdown directly from GitHub Raw (`Access-Control-Allow-Origin: *`).
+### 1. Hybrid Live/Offline Data Architecture (Stale-While-Revalidate)
+- **Instant 0ms First Contentful Paint**: Initial document renders immediately from the pre-bundled `docs-data.js` or `sessionStorage` cache without blocking the UI.
+- **Background Live GitHub Sync**: In the background, `docs-viewer.js` fetches the live markdown directly from GitHub Raw (`Access-Control-Allow-Origin: *`) to ensure documentation edits on `main` are visible without delay.
 - **Snappy 15-Minute Session Caching**: Prevents redundant network requests while browsing between tabs and sections.
-- **4-Tier Resilient Fallback Chain**:
-  1. *Tier 1*: Live GitHub Raw markdown
-  2. *Tier 2*: Cached session entry
-  3. *Tier 3*: Local web server copy (`pyEGClamUI-Docs/...`)
-  4. *Tier 4*: Pre-bundled offline JavaScript dataset ([assets/js/docs-data.js](../assets/js/docs-data.js))
+- **Resilient Fallback & Security**:
+  - Pre-bundled offline JavaScript dataset ([assets/js/docs-data.js](../assets/js/docs-data.js))
+  - Local web server copy (`pyEGClamUI-Docs/...`)
+  - CSP-compliant image fallback listener (zero inline error handlers)
 
 ### 2. Markdown Parsing & Custom Renderers
 - **Slugs & Anchor Links**: Automatically creates URL-safe slug IDs on all `<h2>` and `<h3>` headings with permalink anchors (`#`).

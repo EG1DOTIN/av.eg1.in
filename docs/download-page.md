@@ -54,8 +54,10 @@ Standalone single-click packages with bundled assets and dependencies are contin
 | **macOS (Universal)** | `pyegclamui-macos.zip` | Standalone ZIP Archive | [Download macOS (.zip)](https://github.com/EG1DOTIN/pyEGClamUI/releases/latest/download/pyegclamui-macos.zip) |
 | **Security Checksum** | `SHA256SUMS.txt` | Cryptographic SHA-256 Hashes | [Download SHA256SUMS.txt](https://github.com/EG1DOTIN/pyEGClamUI/releases/latest/download/SHA256SUMS.txt) |
 
-### Automated Client-Side Binding
-Download cards and buttons on [download.html](../download.html) utilize `data-gh-download` hooks (`win_installer`, `win_portable`, `linux`, `mac`, `sha256`). On page load, `main.js` automatically binds the live release URLs, asset filenames, and formatted file sizes directly from the GitHub Releases API.
+### Dual Synchronization Model: Build-Time & Client-Side Binding
+The download page guarantees high resilience through a dual-binding architecture:
+1. **Static Build-Time Synchronization**: `automation-scripts/sync_site_config.py` synchronizes the fallback URLs, filenames, and release tags directly into HTML comment markers and `data-config` attributes (`data-config="downloadWindowsExe"`, `data-config="downloadWindowsZip"`, `data-config="downloadChecksums"`). This guarantees that search crawlers and visitors with JavaScript disabled still have functioning direct download links.
+2. **Dynamic Client-Side Binding**: Download cards and buttons on [download.html](../download.html) utilize `data-gh-download` hooks (`win_installer`, `win_portable`, `linux`, `mac`, `sha256`). On page load, `main.js` queries GitHub Releases API (with 15-minute rate-limit backoff caching) and binds the exact live asset URLs, filenames, and formatted binary sizes directly from GitHub.
 
 ---
 

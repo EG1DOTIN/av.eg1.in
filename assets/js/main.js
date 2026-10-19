@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ========================================================================
   // GitHub Automated Release Synchronization Engine
   // ========================================================================
-  const GH_REPO = 'EG1DOTIN/pyEGClamUI';
+  let GH_REPO = 'EG1DOTIN/pyEGClamUI';
   const GH_CACHE_KEY = 'pyeg_gh_releases';
   const GH_CACHE_TIME_KEY = 'pyeg_gh_releases_time';
   const GH_CACHE_TTL_MS = 15 * 60 * 1000; // 15 minutes TTL
@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return result.join('\n');
   }
 
-  async function fetchGitHubReleases() {
+  async function fetchGitHubReleases(repoSlug = GH_REPO) {
     try {
       const cachedTime = localStorage.getItem(GH_CACHE_TIME_KEY);
       const cachedData = localStorage.getItem(GH_CACHE_KEY);
@@ -140,8 +140,18 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } catch (e) {}
 
+    // Rate-limit backoff check (avoids redundant failing calls if unauthenticated rate limit is exhausted)
     try {
-      const res = await fetch(`https://api.github.com/repos/${GH_REPO}/releases`, {
+      const blockedUntil = localStorage.getItem('pyeg_gh_ratelimit_until');
+      if (blockedUntil && Date.now() < Number(blockedUntil)) {
+        const staleData = localStorage.getItem(GH_CACHE_KEY);
+        if (staleData) return JSON.parse(staleData);
+        return null;
+      }
+    } catch (e) {}
+
+    try {
+      const res = await fetch(`https://api.github.com/repos/${repoSlug}/releases`, {
         headers: { 'Accept': 'application/vnd.github.v3+json' }
       });
       if (res.ok) {
@@ -150,9 +160,15 @@ document.addEventListener('DOMContentLoaded', () => {
           try {
             localStorage.setItem(GH_CACHE_KEY, JSON.stringify(data));
             localStorage.setItem(GH_CACHE_TIME_KEY, String(Date.now()));
+            localStorage.removeItem('pyeg_gh_ratelimit_until');
           } catch (e) {}
           return data;
         }
+      } else if (res.status === 403 || res.status === 429) {
+        // Enforce 15-minute backoff if unauthenticated rate limit is exhausted
+        try {
+          localStorage.setItem('pyeg_gh_ratelimit_until', String(Date.now() + 15 * 60 * 1000));
+        } catch (e) {}
       }
     } catch (err) {
       console.debug('Live GitHub releases fetch fallback to cached/static data:', err);
@@ -174,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 1. Windows Installer (.exe)
     if (assets.windowsExe) {
-      document.querySelectorAll('a[data-gh-download="windows-exe"]').forEach((el) => {
+      document.querySelectorAll('a[data-gh-download="windows-exe"], a[data-config="downloadWindows"]').forEach((el) => {
         el.href = assets.windowsExe.browser_download_url;
       });
       const sizeStr = formatBytes(assets.windowsExe.size);
@@ -185,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 2. Windows Portable (.zip)
     if (assets.windowsZip) {
-      document.querySelectorAll('a[data-gh-download="windows-zip"]').forEach((el) => {
+      document.querySelectorAll('a[data-gh-download="windows-zip"], a[data-config="downloadWindowsZip"]').forEach((el) => {
         el.href = assets.windowsZip.browser_download_url;
       });
       if (!assets.windowsExe) {
@@ -223,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 5. Checksums
     if (assets.checksums) {
-      document.querySelectorAll('a[data-gh-download="checksums"]').forEach((el) => {
+      document.querySelectorAll('a[data-gh-download="checksums"], a[data-config="downloadChecksums"]').forEach((el) => {
         el.href = assets.checksums.browser_download_url;
       });
     }
@@ -305,10 +321,14 @@ document.addEventListener('DOMContentLoaded', () => {
       let config = {};
       if (response.ok) {
         config = await response.json();
+        window.SITE_CONFIG = config;
+        if (config.github?.repo) {
+          GH_REPO = config.github.repo.replace(/^https?:\/\/github\.com\//i, '').replace(/\/$/, '') || GH_REPO;
+        }
       }
 
-      // Check GitHub releases first (with 15-minute caching)
-      const releases = await fetchGitHubReleases();
+      // Check GitHub releases first (with 15-minute caching and rate-limit backoff)
+      const releases = await fetchGitHubReleases(GH_REPO);
       const latestRelease = releases && releases.length > 0 ? releases[0] : null;
 
       let activeVersion = config.project?.version;
@@ -398,6 +418,11 @@ document.addEventListener('DOMContentLoaded', () => {
             el.href = config.downloads.windows;
           });
         }
+        if (config.downloads.windowsZip) {
+          document.querySelectorAll('a[data-config="downloadWindowsZip"]').forEach((el) => {
+            el.href = config.downloads.windowsZip;
+          });
+        }
         if (config.downloads.linux) {
           document.querySelectorAll('a[data-config="downloadLinux"]').forEach((el) => {
             el.href = config.downloads.linux;
@@ -406,6 +431,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (config.downloads.macos) {
           document.querySelectorAll('a[data-config="downloadMacos"]').forEach((el) => {
             el.href = config.downloads.macos;
+          });
+        }
+        if (config.downloads.checksums) {
+          document.querySelectorAll('a[data-config="downloadChecksums"]').forEach((el) => {
+            el.href = config.downloads.checksums;
           });
         }
       }
@@ -426,8 +456,10 @@ document.addEventListener('DOMContentLoaded', () => {
       updateCommentMarkers(document.body, 'privacyPolicy', config.contact?.privacyPolicy);
       updateCommentMarkers(document.body, 'officialSite', config.contact?.officialSite);
       updateCommentMarkers(document.body, 'downloadWindows', config.downloads?.windows);
+      updateCommentMarkers(document.body, 'downloadWindowsZip', config.downloads?.windowsZip);
       updateCommentMarkers(document.body, 'downloadLinux', config.downloads?.linux);
       updateCommentMarkers(document.body, 'downloadMacos', config.downloads?.macos);
+      updateCommentMarkers(document.body, 'downloadChecksums', config.downloads?.checksums);
     } catch (err) {
       console.debug('Dynamic config load notice:', err);
     }
@@ -805,9 +837,8 @@ document.addEventListener('DOMContentLoaded', () => {
         dot.classList.add('is-read');
       }
       try {
-        if (latestSeenTag) {
-          localStorage.setItem('pyeg_seen_release', latestSeenTag);
-        }
+        const tagToMark = latestSeenTag || 'v3.1.0';
+        localStorage.setItem('pyeg_seen_release', tagToMark);
       } catch (e) {}
     }
 

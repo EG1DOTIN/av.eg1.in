@@ -203,8 +203,14 @@ def build_docs_data() -> bool:
 
     print(f"Scanning help documents in {HELP_DOCS_DIR}...")
 
-    # Gather all markdown files
-    md_files = list(HELP_DOCS_DIR.rglob("*.md"))
+    # Gather all markdown files sorted deterministically
+    md_files = sorted(
+        HELP_DOCS_DIR.rglob("*.md"),
+        key=lambda p: (
+            DOC_METADATA.get(p.relative_to(HELP_DOCS_DIR).as_posix(), {}).get("order", 99),
+            p.relative_to(HELP_DOCS_DIR).as_posix().lower()
+        )
+    )
     print(f"Found {len(md_files)} markdown files.")
 
     for md_path in md_files:

@@ -58,7 +58,7 @@ flowchart TD
 ### 2. Dual-Layer Fallback Architecture
 - **Offline / Crawler Resilient**: The HTML source of [updates.html](../updates.html) contains pre-rendered semantic baseline markup to serve as a fallback for offline visitors or search engine bots, while online visitors immediately receive the live releases array directly from the GitHub API.
 - If GitHub API is unreachable, offline, or rate-limited, visitors and search engine bots still view the release timeline without empty states or layout shifts.
-- **Decommissioned `updates.json`**: Previously, releases relied on manual entry in `assets/data/updates.json`. This manual workflow is now completely decommissioned and replaced by the automated GitHub API integration.
+- **Removed Obsolete `updates.json`**: Releases previously relied on manual schema entry in `assets/data/updates.json`. This manual file has been deleted, fully superseded by dynamic GitHub API integration and `automation-scripts/sync_releases_from_github.py`.
 
 ### 3. Live Category Filtering
 - Interactive chip filters allowing users to filter releases by tag (`All`, `Major Releases`, `Maintenance`, `Security`).

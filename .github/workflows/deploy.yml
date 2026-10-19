@@ -71,6 +71,13 @@ jobs:
           rm -rf temp_app_repo
           echo "App repository documentation fetch completed."
 
+      - name: 0. Synchronize Latest Release Metadata from GitHub
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+        run: |
+          python automation-scripts/sync_releases_from_github.py --no-html-sync || echo "Release sync skipped or already up to date."
+
       - name: 1. Synchronize Site Config & Header/Footer Partials
         run: |
           python automation-scripts/sync_site_config.py

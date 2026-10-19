@@ -47,8 +47,6 @@ av.eg1.in/
 │   │   ├── desktop-preview.js   # Interactive desktop mockup simulation engine
 │   │   ├── docs-data.js         # Compiled offline documentation data store
 │   │   └── docs-viewer.js       # Client-side Markdown documentation controller
-│   ├── data/
-│   │   └── updates.json         # Release history and download packages schema
 │   ├── vendor/                  # Offline runtime libraries (marked, prism, mermaid)
 │   └── images/                  # Official SVGs, icons, and OpenGraph assets
 ├── docs/                        # Portal architecture & page-wise documentation
@@ -66,12 +64,15 @@ av.eg1.in/
 ├── gitignore/                   # Local media assets & generation scripts (gitignored)
 │   ├── media/                   # Marketing banners, screenshots, GIFs, and videos
 │   └── python-scripts/          # Local media generation and maintenance scripts
-└── automation-scripts/          # Maintenance, audit, and build tools
-    ├── sync_site_config.py      # Synchronize version metadata from site-config.json
-    ├── sync_components.py       # Synchronize header/footer partials across pages
-    ├── build_docs_data.py       # Compile pyEGClamUI-Docs into assets/js/docs-data.js
-    ├── download_vendor_assets.py # Vendor offline runtime libraries
-    └── audit_website_links.py   # Audit internal links & assets (0 broken links)
+├── .venv/                       # Python virtual environment (gitignored)
+├── automation-scripts/          # Maintenance, audit, and build tools
+│   ├── sync_releases_from_github.py # Automatically sync latest release from GitHub API
+│   ├── sync_site_config.py      # Synchronize version metadata from site-config.json
+│   ├── sync_components.py       # Synchronize header/footer partials across pages
+│   ├── build_docs_data.py       # Compile pyEGClamUI-Docs into assets/js/docs-data.js
+│   ├── download_vendor_assets.py # Vendor offline runtime libraries
+│   ├── sync_docs_from_github.py # Sync docs suite from GitHub into pyEGClamUI-Docs
+│   └── audit_website_links.py   # Audit internal links & assets (0 broken links)
 ```
 
 ---
@@ -95,8 +96,11 @@ To serve and preview the website locally without any build step:
 git clone https://github.com/EG1DOTIN/av.eg1.in.git
 cd av.eg1.in
 
+# Initialize the project virtual environment (if not already created)
+python3 -m venv .venv
+
 # Start a local HTTP server
-python -m http.server 5501
+.venv/bin/python -m http.server 5501
 ```
 
 Once running, navigate to `http://localhost:5501` in any modern web browser.
@@ -107,28 +111,34 @@ Once running, navigate to `http://localhost:5501` in any modern web browser.
 
 All maintenance and auditing scripts are housed in [`automation-scripts/`](automation-scripts/):
 
+### 0. Synchronize Releases from GitHub
+Automatically query GitHub Releases API, update `site-config.json`, and refresh HTML pages:
+```bash
+.venv/bin/python automation-scripts/sync_releases_from_github.py
+```
+
 ### 1. Update Version Numbers & Metadata
 Modify metadata in [`site-config.json`](site-config.json), then propagate updates across all pages:
 ```bash
-python automation-scripts/sync_site_config.py
+.venv/bin/python automation-scripts/sync_site_config.py
 ```
 
 ### 2. Synchronize Header & Footer Partials
 Modify [`partials/header.html`](partials/header.html) or [`partials/footer.html`](partials/footer.html), then update all HTML files:
 ```bash
-python automation-scripts/sync_components.py
+.venv/bin/python automation-scripts/sync_components.py
 ```
 
 ### 3. Compile Documentation Store
 Compile technical documents from `pyEGClamUI-Docs/` into `assets/js/docs-data.js`:
 ```bash
-python automation-scripts/build_docs_data.py
+.venv/bin/python automation-scripts/build_docs_data.py
 ```
 
 ### 4. Verify Link Integrity
 Audit all internal relative links, script sources, and image tags:
 ```bash
-python automation-scripts/audit_website_links.py
+.venv/bin/python automation-scripts/audit_website_links.py
 ```
 
 *(Note: One-time media and asset generator tools reside in `gitignore/` and are excluded from version control).*

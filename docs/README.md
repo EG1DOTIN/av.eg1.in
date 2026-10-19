@@ -79,17 +79,16 @@ av.eg1.in/
 │   │   ├── desktop-preview.js   # Interactive desktop mockup simulation engine
 │   │   ├── docs-data.js         # Compiled offline documentation data store (18 guides)
 │   │   └── docs-viewer.js       # Markdown docs controller (live GitHub sync & lazy Mermaid)
-│   ├── data/
-│   │   └── updates.json         # Legacy offline schema (live releases synced via GitHub API)
 │   ├── vendor/                  # Offline runtime libraries (marked, prism, mermaid)
 │   └── images/                  # Production brand logos, icons, and SEO cards
 ├── docs/                        # Architecture & page specifications (9 developer guides)
 ├── pyEGClamUI-Docs/             # Upstream application technical documentation suite (18 guides)
 ├── automation-scripts/          # Maintenance, audit, and build tools
+│   ├── sync_releases_from_github.py # Pull latest release tags, binaries & checksums into site-config.json
 │   ├── sync_site_config.py      # Synchronize version metadata from site-config.json
 │   ├── sync_components.py       # Synchronize header/footer partials across pages
 │   ├── sync_docs_from_github.py # Pull latest documentation suite from GitHub main branch
-│   ├── build_docs_data.py       # Compile pyEGClamUI-Docs into assets/js/docs-data.js
+│   ├── build_docs_data.py       # Compile pyEGClamUI-Docs into assets/js/docs-data.js (deterministic)
 │   ├── download_vendor_assets.py # Vendor offline runtime libraries
 │   └── audit_website_links.py   # Zero-broken-link audit gate (100% verified)
 └── gitignore/                   # Local media assets & maintenance scripts (gitignored)

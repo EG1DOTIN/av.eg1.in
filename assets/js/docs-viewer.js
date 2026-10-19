@@ -33,7 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let headingObserver = null;
 
   // GitHub Base URL fallback from site-config or default
-  const GITHUB_REPO = 'https://github.com/EG1DOTIN/pyEGClamUI';
+  const GITHUB_REPO = window.SITE_CONFIG?.github?.repo || 'https://github.com/EG1DOTIN/pyEGClamUI';
+  const GITHUB_REPO_SLUG = GITHUB_REPO.replace(/^https?:\/\/github\.com\//i, '').replace(/\/$/, '') || 'EG1DOTIN/pyEGClamUI';
 
   // --------------------------------------------------------------------------
   // 1. Toast Notification Helper
@@ -144,12 +145,12 @@ document.addEventListener('DOMContentLoaded', () => {
         : (href.startsWith('pyEGClamUI-Docs/docs/') ? href.replace('pyEGClamUI-Docs/', '') : href);
 
       const rawGhSrc = !/^https?:\/\/|^\/\/|^data:/i.test(href)
-        ? `https://raw.githubusercontent.com/EG1DOTIN/pyEGClamUI/main/${href.replace(/^\.\//, '')}`
+        ? `https://raw.githubusercontent.com/${GITHUB_REPO_SLUG}/main/${href.replace(/^\.\//, '')}`
         : '';
 
       return `
         <figure class="docs-image-figure">
-          <img src="${resolvedSrc}"${altAttr}${titleAttr} class="docs-image" loading="lazy" onerror="if(!this.dataset.triedFallback){this.dataset.triedFallback='1';this.src='${fallbackSrc}';}else if('${rawGhSrc}'&&!this.dataset.triedGh){this.dataset.triedGh='1';this.src='${rawGhSrc}';}">
+          <img src="${resolvedSrc}"${altAttr}${titleAttr} class="docs-image" loading="lazy" data-fallback-src="${fallbackSrc}" data-gh-src="${rawGhSrc}">
         </figure>
       `;
     };
@@ -241,6 +242,23 @@ document.addEventListener('DOMContentLoaded', () => {
         breaks: false,
         pedantic: false,
       });
+    }
+
+    // Event delegation for documentation image fallbacks (100% CSP compliant)
+    if (markdownContainer && !markdownContainer.dataset.imgFallbackBound) {
+      markdownContainer.dataset.imgFallbackBound = 'true';
+      markdownContainer.addEventListener('error', (e) => {
+        if (e.target && e.target.tagName === 'IMG') {
+          const img = e.target;
+          if (!img.dataset.triedFallback && img.dataset.fallbackSrc) {
+            img.dataset.triedFallback = '1';
+            img.src = img.dataset.fallbackSrc;
+          } else if (!img.dataset.triedGh && img.dataset.ghSrc) {
+            img.dataset.triedGh = '1';
+            img.src = img.dataset.ghSrc;
+          }
+        }
+      }, true);
     }
   }
 
@@ -528,9 +546,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Determine markdown content:
     // Tier 1: Check sessionStorage cache (15-min TTL for instant snappy browsing)
-    // Tier 2: Live fetch directly from GitHub repository main branch (always up to date with pipelines)
-    // Tier 3: Web server local pyEGClamUI-Docs/ fallback
-    // Tier 4: Pre-bundled offline docData.content from docs-data.js
+    // Tier 2: Instant rendering of pre-bundled offline docData.content from docs-data.js (0ms stall)
+    // Tier 3: Non-blocking background revalidation from GitHub repository main branch (Stale-While-Revalidate)
     let rawMarkdown = docData.content;
     const DOC_CACHE_TTL = 15 * 60 * 1000; // 15 minutes
     const cacheKey = `pyeg_gh_doc_${docId}`;
@@ -550,119 +567,81 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (cachedMarkdown) {
       rawMarkdown = cachedMarkdown;
-    } else {
-      let fetchedSuccessfully = false;
-
-      // Tier 2: Live GitHub Raw fetch
-      try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 6000);
-        const ghRawUrl = `https://raw.githubusercontent.com/EG1DOTIN/pyEGClamUI/main/${docData.filename}`;
-        const resp = await fetch(ghRawUrl, { signal: controller.signal });
-        clearTimeout(timeoutId);
-
-        if (resp.ok) {
-          const liveText = await resp.text();
-          if (liveText && liveText.trim().length > 0) {
-            rawMarkdown = liveText;
-            fetchedSuccessfully = true;
-            try {
-              sessionStorage.setItem(cacheKey, JSON.stringify({
-                content: liveText,
-                timestamp: Date.now()
-              }));
-            } catch (storageErr) {
-              // Ignore sessionStorage quota
-            }
-          }
-        }
-      } catch (ghErr) {
-        console.debug('GitHub raw live documentation fetch fallback:', ghErr);
-      }
-
-      // Tier 3: Local server pyEGClamUI-Docs/ fallback
-      if (!fetchedSuccessfully && window.location.protocol.startsWith('http')) {
-        try {
-          const fetchUrl = `pyEGClamUI-Docs/${docData.filename}?t=${Date.now()}`;
-          const resp = await fetch(fetchUrl);
-          if (resp.ok) {
-            rawMarkdown = await resp.text();
-            fetchedSuccessfully = true;
-          }
-        } catch (err) {
-          // Fallback silently to Tier 4 pre-bundled data
-        }
-      }
     }
 
-    // Parse Markdown to HTML
-    const htmlContent = marked.parse(rawMarkdown);
-    markdownContainer.innerHTML = htmlContent;
+    function renderDocView(markdownText) {
+      // Parse Markdown to HTML
+      const htmlContent = marked.parse(markdownText);
+      markdownContainer.innerHTML = htmlContent;
 
-    // Post-Process: Transform GitHub Callout Alerts
-    transformAlertCallouts(markdownContainer);
+      // Post-Process: Transform GitHub Callout Alerts
+      transformAlertCallouts(markdownContainer);
 
-    // Post-Process: Code Syntax Highlighting via Prism
-    if (typeof Prism !== 'undefined') {
-      Prism.highlightAllUnder(markdownContainer);
-    }
+      // Post-Process: Code Syntax Highlighting via Prism
+      if (typeof Prism !== 'undefined') {
+        Prism.highlightAllUnder(markdownContainer);
+      }
 
-    // Post-Process: Lazy-load & Render Mermaid Diagrams on-demand
-    // Saves ~3.3MB (800KB compressed) on initial doc page load
-    const mermaidNodes = markdownContainer.querySelectorAll('.mermaid');
-    if (mermaidNodes.length > 0) {
-      ensureMermaidLoaded()
-        .then((m) => {
-          const currentNodes = markdownContainer.querySelectorAll('.mermaid');
-          if (currentNodes.length > 0 && typeof m.run === 'function') {
-            const runPromise = m.run({ nodes: currentNodes });
-            if (runPromise && typeof runPromise.then === 'function') {
-              runPromise
-                .then(() => postProcessMermaidDiagrams())
-                .catch(() => postProcessMermaidDiagrams());
-            } else {
-              setTimeout(() => postProcessMermaidDiagrams(), 100);
+      // Post-Process: Lazy-load & Render Mermaid Diagrams on-demand
+      // Saves ~3.3MB (800KB compressed) on initial doc page load
+      const mermaidNodes = markdownContainer.querySelectorAll('.mermaid');
+      if (mermaidNodes.length > 0) {
+        ensureMermaidLoaded()
+          .then((m) => {
+            const currentNodes = markdownContainer.querySelectorAll('.mermaid');
+            if (currentNodes.length > 0 && typeof m.run === 'function') {
+              const runPromise = m.run({ nodes: currentNodes });
+              if (runPromise && typeof runPromise.then === 'function') {
+                runPromise
+                  .then(() => postProcessMermaidDiagrams())
+                  .catch(() => postProcessMermaidDiagrams());
+              } else {
+                setTimeout(() => postProcessMermaidDiagrams(), 100);
+              }
             }
+          })
+          .catch((mermaidErr) => {
+            console.warn('Mermaid rendering notice:', mermaidErr);
+          });
+      }
+
+      // Attach Copy Handlers to Code Blocks
+      markdownContainer.querySelectorAll('.code-copy-btn').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const pre = btn.closest('.code-block-wrapper').querySelector('pre');
+          if (!pre) return;
+          const codeText = pre.innerText;
+          try {
+            await navigator.clipboard.writeText(codeText);
+            const originalText = btn.innerHTML;
+            btn.innerHTML = `
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span>Copied!</span>
+            `;
+            btn.classList.add('copied');
+            setTimeout(() => {
+              btn.innerHTML = originalText;
+              btn.classList.remove('copied');
+            }, 2000);
+          } catch (err) {
+            showToast('Failed to copy code to clipboard.');
           }
-        })
-        .catch((mermaidErr) => {
-          console.warn('Mermaid rendering notice:', mermaidErr);
         });
-    }
-
-    // Attach Copy Handlers to Code Blocks
-    markdownContainer.querySelectorAll('.code-copy-btn').forEach((btn) => {
-      btn.addEventListener('click', async () => {
-        const pre = btn.closest('.code-block-wrapper').querySelector('pre');
-        if (!pre) return;
-        const codeText = pre.innerText;
-        try {
-          await navigator.clipboard.writeText(codeText);
-          const originalText = btn.innerHTML;
-          btn.innerHTML = `
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
-            <span>Copied!</span>
-          `;
-          btn.classList.add('copied');
-          setTimeout(() => {
-            btn.innerHTML = originalText;
-            btn.classList.remove('copied');
-          }, 2000);
-        } catch (err) {
-          showToast('Failed to copy code to clipboard.');
-        }
       });
-    });
 
-    // Build Right Sidebar Table of Contents
-    buildOnPageTOC();
+      // Build Right Sidebar Table of Contents
+      buildOnPageTOC();
 
-    // Store raw markdown in modal textarea
-    if (rawTextarea) {
-      rawTextarea.value = rawMarkdown;
+      // Store raw markdown in modal textarea
+      if (rawTextarea) {
+        rawTextarea.value = markdownText;
+      }
     }
+
+    // Step 1: Render immediately with zero network delay (0ms)
+    renderDocView(rawMarkdown);
 
     // Handle scroll: scroll to anchor if given, else scroll to top
     if (targetAnchor) {
@@ -674,6 +653,26 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 100);
     } else {
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Step 2: Non-blocking background revalidation (Stale-While-Revalidate)
+    if (!cachedMarkdown && window.location.protocol.startsWith('http')) {
+      const ghRawUrl = `https://raw.githubusercontent.com/${GITHUB_REPO_SLUG}/main/${docData.filename}`;
+      fetch(ghRawUrl)
+        .then((resp) => (resp.ok ? resp.text() : null))
+        .then((liveText) => {
+          if (liveText && liveText.trim().length > 0 && liveText.trim() !== rawMarkdown.trim()) {
+            rawMarkdown = liveText;
+            renderDocView(liveText);
+            try {
+              sessionStorage.setItem(cacheKey, JSON.stringify({
+                content: liveText,
+                timestamp: Date.now()
+              }));
+            } catch (_) {}
+          }
+        })
+        .catch((ghErr) => console.debug('GitHub raw background revalidation skipped:', ghErr));
     }
   }
 

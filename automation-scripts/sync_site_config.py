@@ -42,8 +42,10 @@ def sync_config():
     privacy_url = config["contact"]["privacyPolicy"]
     official_url = config["contact"]["officialSite"]
     dl_win = config.get("downloads", {}).get("windows", "")
+    dl_win_zip = config.get("downloads", {}).get("windowsZip", "")
     dl_linux = config.get("downloads", {}).get("linux", "")
     dl_mac = config.get("downloads", {}).get("macos", "")
+    dl_checksums = config.get("downloads", {}).get("checksums", "")
     screenshots = config.get("screenshots", [])
 
     html_files = [f for f in ROOT_DIR.glob("*.html") if f.name not in ("screenshots.html", "how-to-use.html")]
@@ -157,6 +159,20 @@ def sync_config():
                 content,
                 flags=re.DOTALL
             )
+        if dl_win_zip:
+            content = re.sub(
+                r'<!--\s*config:downloadWindowsZip\s*-->.*?<!--\s*/config:downloadWindowsZip\s*-->',
+                f'<!-- config:downloadWindowsZip -->{dl_win_zip}<!-- /config:downloadWindowsZip -->',
+                content,
+                flags=re.DOTALL
+            )
+        if dl_checksums:
+            content = re.sub(
+                r'<!--\s*config:downloadChecksums\s*-->.*?<!--\s*/config:downloadChecksums\s*-->',
+                f'<!-- config:downloadChecksums -->{dl_checksums}<!-- /config:downloadChecksums -->',
+                content,
+                flags=re.DOTALL
+            )
 
         # 10. Sync any data-config hrefs on anchor tags
         content = re.sub(
@@ -261,6 +277,28 @@ def sync_config():
             content = re.sub(
                 r'(<a\s+[^>]*data-config="downloadMacos"[^>]*href=")[^"]*(")',
                 rf'\g<1>{dl_mac}\g<2>',
+                content
+            )
+        if dl_win_zip:
+            content = re.sub(
+                r'(<a\s+[^>]*href=")[^"]*("[^>]*data-config="downloadWindowsZip"[^>]*>)',
+                rf'\g<1>{dl_win_zip}\g<2>',
+                content
+            )
+            content = re.sub(
+                r'(<a\s+[^>]*data-config="downloadWindowsZip"[^>]*href=")[^"]*(")',
+                rf'\g<1>{dl_win_zip}\g<2>',
+                content
+            )
+        if dl_checksums:
+            content = re.sub(
+                r'(<a\s+[^>]*href=")[^"]*("[^>]*data-config="downloadChecksums"[^>]*>)',
+                rf'\g<1>{dl_checksums}\g<2>',
+                content
+            )
+            content = re.sub(
+                r'(<a\s+[^>]*data-config="downloadChecksums"[^>]*href=")[^"]*(")',
+                rf'\g<1>{dl_checksums}\g<2>',
                 content
             )
 

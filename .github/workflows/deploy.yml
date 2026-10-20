@@ -10,23 +10,11 @@ on:
       - main
       - master
   workflow_dispatch:
-    inputs:
-      fetch_from_app_repo:
-        description: 'Fetch latest documentation from pyEGClamUI app repository'
-        required: false
-        type: boolean
-        default: false
-  repository_dispatch:
-    types:
-      - docs_updated
-      - pyegclamui_docs_updated
-      - release_published
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
-  pull-requests: write
 
 concurrency:
   group: 'pages'
@@ -34,50 +22,16 @@ concurrency:
 
 jobs:
   validate-and-build:
-    name: Verify, Sync & Audit Website
+    name: Verify, Build & Audit Website
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Website Repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
-      # Optional sync step: If triggered via repository_dispatch or manual flag
-      - name: Fetch Latest Docs from App Repository
-        if: ${{ github.event_name == 'repository_dispatch' || (github.event_name == 'workflow_dispatch' && inputs.fetch_from_app_repo == true) }}
-        continue-on-error: true
-        run: |
-          echo "Attempting to fetch latest documentation from EG1DOTIN/pyEGClamUI..."
-          git clone --depth 1 https://github.com/EG1DOTIN/pyEGClamUI.git temp_app_repo || {
-            echo "::warning ::Could not clone EG1DOTIN/pyEGClamUI (repository may be empty or private). Proceeding with local docs."
-            exit 0
-          }
-
-          if [ -d "temp_app_repo/docs" ]; then
-            echo "Syncing docs/ directory into pyEGClamUI-Docs/docs/..."
-            mkdir -p pyEGClamUI-Docs/docs
-            cp -r temp_app_repo/docs/* pyEGClamUI-Docs/docs/
-          fi
-
-          if [ -f "temp_app_repo/README.md" ]; then
-            echo "Syncing README.md into pyEGClamUI-Docs/README.md..."
-            cp temp_app_repo/README.md pyEGClamUI-Docs/README.md
-          fi
-
-          rm -rf temp_app_repo
-          echo "App repository documentation fetch completed."
-
-      - name: 0. Synchronize Latest Release Metadata from GitHub
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        continue-on-error: true
-        run: |
-          python automation-scripts/sync_releases_from_github.py --no-html-sync || echo "Release sync skipped or already up to date."
 
       - name: 1. Synchronize Site Config & Header/Footer Partials
         run: |
@@ -90,54 +44,6 @@ jobs:
       - name: 3. Audit Website Links & Asset References (Zero Broken Links Gate)
         run: |
           python automation-scripts/audit_website_links.py
-
-      - name: Commit and Push Synchronized Files
-        if: ${{ github.event_name != 'pull_request' }}
-        continue-on-error: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          
-          # Stage synced files, HTML pages, and docs bundle
-          git add site-config.json assets/js/docs-data.js pyEGClamUI-Docs/ *.html
-          
-          if git diff --staged --quiet; then
-            echo "All site configs, components, and documentation stores are already up to date."
-          else
-            git commit -m "chore(ci): auto-sync site config, partials, and docs bundle [skip ci]"
-            
-            # Attempt direct push (succeeds if branch is not rule-restricted or if GitHub Actions is in bypass list)
-            if git push origin ${{ github.ref_name }}; then
-              echo "Successfully pushed auto-synced files directly to ${{ github.ref_name }}."
-            else
-              echo "::warning ::Direct push to ${{ github.ref_name }} was rejected by repository rules (requires a pull request)."
-              
-              # Fallback: Push to a dedicated sync branch and create/update an automated PR
-              SYNC_BRANCH="chore/auto-sync-docs-and-config"
-              echo "Pushing changes to fallback branch '$SYNC_BRANCH'..."
-              git checkout -B "$SYNC_BRANCH"
-              if git push origin "$SYNC_BRANCH" --force; then
-                echo "Successfully updated sync branch '$SYNC_BRANCH'."
-                
-                # Check if a PR already exists or create a new one
-                if command -v gh >/dev/null 2>&1; then
-                  EXISTING_PR=$(gh pr list --base ${{ github.ref_name }} --head "$SYNC_BRANCH" --json number -q '.[0].number' 2>/dev/null || echo "")
-                  if [ -z "$EXISTING_PR" ]; then
-                    echo "Opening automated pull request for synchronized assets..."
-                    gh pr create --base ${{ github.ref_name }} --head "$SYNC_BRANCH" \
-                      --title "chore(ci): auto-sync site config, partials, and docs bundle" \
-                      --body "Automated update generated by website CI pipeline: synchronized release metadata, documentation bundle, and site configuration." || echo "::warning ::Could not create PR automatically."
-                  else
-                    echo "Pull request #$EXISTING_PR already exists for $SYNC_BRANCH."
-                  fi
-                fi
-              else
-                echo "::warning ::Could not push to sync branch '$SYNC_BRANCH'. Continuing deployment without repository commit."
-              fi
-            fi
-          fi
 
       - name: Upload Pages Artifact
         if: ${{ github.event_name != 'pull_request' }}

@@ -88,9 +88,10 @@ The website workflow is located at [`.github/workflows/deploy.yml`](../.github/w
 5. **Site Config & Partial Sync**: Executes `python automation-scripts/sync_site_config.py` to ensure all pages have synchronized versions, direct binary links, and partials.
 6. **Deterministic Compilation**: Runs `python automation-scripts/build_docs_data.py` to deterministically compile Markdown files into `assets/js/docs-data.js`.
 7. **Zero-Broken-Link Audit Gate**: Runs `python automation-scripts/audit_website_links.py` to verify 100% link integrity across all HTML files.
-8. **Git Auto-Commit & Push**:
-   Checks whether `site-config.json`, `assets/js/docs-data.js`, or HTML pages have changed. If changes exist, commits them with `[skip ci]` to prevent recursive loops and pushes directly to the repository.
-9. **GitHub Pages Deployment**: Packages and deploys the audited production build to GitHub Pages.
+8. **Resilient Git Auto-Sync**:
+   Checks whether `site-config.json`, `assets/js/docs-data.js`, or HTML pages have changed. If changes exist, commits them with `[skip ci]`. If direct push is allowed (or GitHub Actions is in the repository bypass list), pushes directly; if branch protection requires a PR, it automatically pushes to a dedicated sync branch (`chore/auto-sync-docs-and-config`) and opens an automated PR without failing the deployment.
+9. **Dual Deployment (GitHub Pages & Firebase)**:
+   Packages the freshly audited build artifact for GitHub Pages and deploys it, while simultaneously deploying the identical build artifact to Firebase Hosting (`av.eg1.in`).
 
 ---
 

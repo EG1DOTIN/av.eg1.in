@@ -82,15 +82,13 @@ The website workflow is located at [`.github/workflows/deploy.yml`](../.github/w
 
 1. **Checkout**: Checks out the website repository.
 2. **Python Setup**: Initializes Python 3.11 runner environment.
-3. **Synchronize Latest Releases (Step 0)**: Runs `python automation-scripts/sync_releases_from_github.py` using `GITHUB_TOKEN` to pull the latest published release tags, binaries (`.exe`, `.zip`, `.tar.gz`), and SHA256 checksums into `site-config.json`.
-4. **Remote Sync (Conditional)**:
-   If triggered by cross-repo dispatch, attempts a shallow clone of `https://github.com/EG1DOTIN/pyEGClamUI.git`. If docs are found, copies `docs/` and `README.md` into `pyEGClamUI-Docs/`. If the repo is empty or private, it gracefully falls back to the existing local docs without failing.
-5. **Site Config & Partial Sync**: Executes `python automation-scripts/sync_site_config.py` to ensure all pages have synchronized versions, direct binary links, and partials.
-6. **Deterministic Compilation**: Runs `python automation-scripts/build_docs_data.py` to deterministically compile Markdown files into `assets/js/docs-data.js`.
-7. **Zero-Broken-Link Audit Gate**: Runs `python automation-scripts/audit_website_links.py` to verify 100% link integrity across all HTML files.
-8. **Git Auto-Commit & Push**:
-   Checks whether `site-config.json`, `assets/js/docs-data.js`, or HTML pages have changed. If changes exist, commits them with `[skip ci]` to prevent recursive loops and pushes directly to the repository.
-9. **GitHub Pages Deployment**: Packages and deploys the audited production build to GitHub Pages.
+3. **Site Config & Partial Sync**: Executes `python automation-scripts/sync_site_config.py` to ensure all pages have synchronized versions and partials.
+4. **Deterministic Compilation**: Runs `python automation-scripts/build_docs_data.py` to deterministically compile Markdown files into `assets/js/docs-data.js`.
+5. **Zero-Broken-Link Audit Gate**: Runs `python automation-scripts/audit_website_links.py` to verify 100% link integrity across all HTML files. If any link is broken, deployment halts immediately.
+6. **Dual Deployment (GitHub Pages & Firebase)**:
+   - **GitHub Pages**: Packages the audited static directory as a Pages artifact and deploys it via official `actions/deploy-pages@v4`.
+   - **Firebase Hosting**: Downloads the identical audited build artifact and deploys it live to Firebase Hosting (`av.eg1.in`) using `FirebaseExtended/action-hosting-deploy@v0`.
+   - **Zero Git Side-Effects**: The deployment workflow is strictly unidirectional (Build & Deploy)—it never modifies git history or attempts direct pushes to `main`, fully respecting repository branch protection rules.
 
 ---
 

@@ -1,55 +1,29 @@
-# pyEGClamUI Website - .gitignore
+# Dependencies & Build Outputs
+node_modules
+node_modules/
+dist/
+dist-site/
+*.tsbuildinfo
 
-# Workspace & Agent Tooling
-.agents
-.agents/
-.vscode/
-
-# Archived files 
-.unused-old-files/
-
-#ignored files
-gitignore
-gitignore/
-
-# Secrets, Environment & Security Credentials
-*.env
-.env.*
-*.pem
-*.key
-*.cert
-*.pfx
-
-# Python & Environment Artifacts
-__pycache__/
-*.py[cod]
-*$py.class
+# Parent Workspace Symlinks (NO trailing slashes!)
 .venv
-.venv/
-venv
-venv/
-env/
-ENV/
-.pytest_cache/
-.coverage
-htmlcov/
+.agents
+gitignore
 
-# Deployment & Build Logs
+# Environment & Local secrets
+.env
+.env.local
+.env.*.local
+*.local
+
+# Firebase Cache & Logs
 .firebase/
 firebase-debug.log*
 firestore-debug.log*
-npm-debug.log*
-yarn-error.log*
 *.log
 
-# Temporary & Editor Artifacts
-*.tmp
-*.bak
-*.swp
-*~
-pyrightconfig.json
-
-# Operating System Files
+# OS & Editor
 .DS_Store
 Thumbs.db
-desktop.ini
+.vscode/
+.idea/

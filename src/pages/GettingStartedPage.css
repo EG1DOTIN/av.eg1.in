@@ -1,0 +1,365 @@
+/* ==========================================================================
+   pyEGClamUI Getting Started Page Styles
+   4-Step Walkthrough, Split-Grid Guides, OS Setup Tabs & Quick Start
+   ========================================================================== */
+
+.getting-started-page {
+  padding-top: 24px;
+  padding-bottom: 64px;
+  min-height: calc(100vh - 140px);
+}
+
+.gs-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.section-tag {
+  display: inline-block;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #00dc82;
+  background: rgba(0, 220, 130, 0.1);
+  border: 1px solid rgba(0, 220, 130, 0.25);
+  padding: 4px 12px;
+  border-radius: 9999px;
+  margin-bottom: 12px;
+}
+
+.gs-title {
+  font-size: clamp(2rem, 1.6rem + 1.8vw, 2.8rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+}
+
+.gs-subtitle {
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  max-width: 660px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* 4-Step Walkthrough */
+.step-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 840px;
+  margin: 0 auto 48px auto;
+}
+
+.step-card {
+  display: flex;
+  gap: 20px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: 14px;
+  padding: 24px;
+  align-items: flex-start;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+.step-card:hover {
+  border-color: rgba(0, 220, 130, 0.35);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.step-number {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(0, 220, 130, 0.12);
+  border: 1.5px solid rgba(0, 220, 130, 0.4);
+  color: #00dc82;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.step-content {
+  flex-grow: 1;
+}
+
+.step-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.step-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
+.step-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13.5px;
+  color: var(--text-secondary);
+}
+
+.step-bullets li {
+  position: relative;
+  padding-left: 18px;
+  line-height: 1.5;
+}
+
+.step-bullets li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #00dc82;
+  font-weight: 800;
+  font-size: 16px;
+}
+
+/* Split Grid Guides */
+.split-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  max-width: 840px;
+  margin: 0 auto 48px auto;
+}
+
+@media (max-width: 768px) {
+  .split-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.guide-box {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: 14px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+.guide-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  color: #38bdf8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.guide-icon-box.emerald {
+  background: rgba(0, 220, 130, 0.1);
+  border-color: rgba(0, 220, 130, 0.25);
+  color: #00dc82;
+}
+
+.guide-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.guide-desc {
+  font-size: 13.5px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+
+.guide-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.guide-bullets li {
+  position: relative;
+  padding-left: 18px;
+  line-height: 1.5;
+}
+
+.guide-bullets li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #38bdf8;
+  font-weight: 800;
+}
+
+.guide-box:nth-child(2) .guide-bullets li::before {
+  color: #00dc82;
+}
+
+/* Multi-Platform Setup Tabs */
+.os-setup-section {
+  max-width: 840px;
+  margin: 0 auto 48px auto;
+}
+
+.os-tabs-nav {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.os-tab-btn {
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+  border: 1px solid var(--border-default);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.os-tab-btn:hover {
+  background: var(--bg-subtle);
+  color: var(--text-primary);
+}
+
+.os-tab-btn.active {
+  background: rgba(0, 220, 130, 0.12);
+  border-color: #00dc82;
+  color: #00dc82;
+  box-shadow: 0 0 16px rgba(0, 220, 130, 0.15);
+}
+
+.os-tab-panel {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: 14px;
+  padding: 30px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+.os-tab-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.os-step-list {
+  padding-left: 20px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.os-step-list li {
+  margin-bottom: 18px;
+}
+
+.os-step-list li:last-child {
+  margin-bottom: 0;
+}
+
+/* Code box with copy */
+.cmd-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-default);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin: 8px 0;
+  gap: 12px;
+}
+
+.cmd-box code {
+  font-family: var(--font-mono, monospace);
+  font-size: 13px;
+  color: var(--color-sky);
+  word-break: break-all;
+}
+
+.cmd-copy-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.cmd-copy-btn:hover {
+  background: var(--bg-subtle);
+  color: var(--text-primary);
+}
+
+.cmd-copy-btn.copied {
+  background: rgba(0, 220, 130, 0.2);
+  border-color: #00dc82;
+  color: #00dc82;
+}
+
+/* Deep Technical Docs CTA */
+.cta-card {
+  max-width: 840px;
+  margin: 0 auto;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: 14px;
+  padding: 36px 24px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.cta-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.cta-desc {
+  color: var(--text-secondary);
+  font-size: 14px;
+  max-width: 600px;
+  margin: 0 auto 24px auto;
+  line-height: 1.6;
+}
+
+.cta-actions {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}

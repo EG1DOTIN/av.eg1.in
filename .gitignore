@@ -1,6 +1,7 @@
 # pyEGClamUI Website - .gitignore
 
 # Workspace & Agent Tooling
+.agents
 .agents/
 .vscode/
 
@@ -8,6 +9,7 @@
 .unused-old-files/
 
 #ignored files
+gitignore
 gitignore/
 
 # Secrets, Environment & Security Credentials
@@ -22,7 +24,9 @@ gitignore/
 __pycache__/
 *.py[cod]
 *$py.class
+.venv
 .venv/
+venv
 venv/
 env/
 ENV/

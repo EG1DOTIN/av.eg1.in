@@ -1,0 +1,127 @@
+/* ==========================================================================
+   pyEGClamUI Footer Styles (av.eg1.in)
+   Exact parity with av.eg1.in/partials/footer.html specification
+   ========================================================================== */
+
+.av-site-footer {
+  margin-top: auto;
+  background-color: var(--eg-bg-canvas, #0b0b0e);
+  border-top: 1px solid var(--border-default);
+  padding-top: clamp(2.5rem, 2rem + 2vw, 3.5rem);
+  padding-bottom: 2rem;
+  font-size: 0.8125rem;
+  color: var(--eg-text-muted, #6e6e7c);
+  font-family: var(--eg-font-sans, 'Plus Jakarta Sans', sans-serif);
+}
+
+.av-footer-grid {
+  display: grid;
+  grid-template-columns: 2fr repeat(3, 1fr);
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+@media (max-width: 900px) {
+  .av-footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.75rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .av-footer-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+.av-footer-brand-desc {
+  color: var(--eg-text-secondary, #a0a0ab);
+  margin-top: 0.75rem;
+  max-width: 340px;
+  line-height: 1.6;
+  font-size: 0.875rem;
+}
+
+.av-footer-col-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--eg-text-primary, #f4f4f6);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.85rem;
+}
+
+.av-footer-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0;
+  margin: 0;
+}
+
+.av-footer-links a,
+.av-footer-links button {
+  color: var(--eg-text-secondary, #a0a0ab);
+  transition: color 0.15s ease, transform 0.15s ease;
+  display: inline-block;
+  font-size: 0.8125rem;
+  text-decoration: none;
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.av-footer-links a:hover,
+.av-footer-links button:hover {
+  color: var(--color-emerald);
+  transform: translateX(2px);
+}
+
+.av-footer-bottom {
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.av-trademark-notice {
+  font-size: 0.725rem;
+  color: var(--eg-text-muted, #6e6e7c);
+  line-height: 1.55;
+  max-width: 820px;
+  margin: 0;
+}
+
+.av-trademark-notice strong {
+  color: var(--eg-text-secondary, #a0a0ab);
+}
+
+.av-product-highlight {
+  color: var(--color-sky);
+  font-weight: 600;
+}
+
+.av-footer-copyright {
+  font-size: 0.78rem;
+  color: var(--eg-text-muted, #6e6e7c);
+  white-space: nowrap;
+}
+
+.av-footer-copyright a {
+  color: var(--eg-text-secondary, #a0a0ab);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.15s ease;
+}
+
+.av-footer-copyright a:hover {
+  color: #00dc82;
+}

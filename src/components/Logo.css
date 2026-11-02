@@ -1,0 +1,71 @@
+/* ==========================================================================
+   pyEGClamUI Logo Styles (av.eg1.in)
+   ========================================================================== */
+
+.av-brand-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--eg-font-sans, 'Plus Jakarta Sans', sans-serif);
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--eg-text-primary, var(--text-primary));
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  user-select: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.av-brand-link:hover {
+  opacity: 0.95;
+}
+
+.av-logo-shield {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.av-logo-img {
+  object-fit: contain;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  filter: drop-shadow(0 0 10px rgba(0, 220, 130, 0.35));
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+.av-brand-link:hover .av-logo-img {
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 14px rgba(0, 220, 130, 0.55));
+}
+
+.av-brand-name {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 1px;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.av-brand-accent {
+  color: #00dc82;
+  text-shadow: 0 0 12px rgba(0, 220, 130, 0.4);
+}
+
+.av-version-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+  border-radius: 9999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  margin-left: 6px;
+}

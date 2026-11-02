@@ -201,6 +201,67 @@ export const DocumentationPage: React.FC = () => {
     return docsData.documents[currentDocId] || docsData.documents[docsData.defaultDoc] || null;
   }, [docsData, currentDocId]);
 
+  // Live Markdown State for Stale-While-Revalidate from pyEGClamUI GitHub main branch
+  const [liveDocContent, setLiveDocContent] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    if (!currentDoc || !currentDoc.filename) return;
+
+    const docId = currentDoc.id;
+    const cacheKey = `pyeg_gh_doc_${docId}`;
+    const DOC_CACHE_TTL = 15 * 60 * 1000; // 15 minutes
+
+    // Tier 1: Check sessionStorage cache
+    let cached: string | null = null;
+    try {
+      const stored = sessionStorage.getItem(cacheKey);
+      if (stored) {
+        const item = JSON.parse(stored);
+        if (item && item.timestamp && Date.now() - item.timestamp < DOC_CACHE_TTL && item.content) {
+          cached = item.content;
+        }
+      }
+    } catch {
+      // Ignore storage errors
+    }
+
+    if (cached) {
+      if (liveDocContent[docId] !== cached) {
+        setLiveDocContent((prev) => ({ ...prev, [docId]: cached! }));
+      }
+      return;
+    }
+
+    // Tier 3: Non-blocking background revalidation from GitHub repository main branch
+    if (typeof window !== 'undefined' && window.location.protocol.startsWith('http')) {
+      const ghRawUrl = `https://raw.githubusercontent.com/EG1DOTIN/pyEGClamUI/main/${currentDoc.filename}`;
+      fetch(ghRawUrl)
+        .then((resp) => (resp.ok ? resp.text() : null))
+        .then((liveText) => {
+          if (liveText && liveText.trim().length > 0 && liveText.trim() !== currentDoc.content.trim()) {
+            setLiveDocContent((prev) => ({ ...prev, [docId]: liveText }));
+            try {
+              sessionStorage.setItem(
+                cacheKey,
+                JSON.stringify({
+                  content: liveText,
+                  timestamp: Date.now(),
+                })
+              );
+            } catch {
+              // Ignore storage errors
+            }
+          }
+        })
+        .catch((ghErr) => console.debug('GitHub raw background revalidation skipped:', ghErr));
+    }
+  }, [currentDoc]);
+
+  const activeMarkdown = useMemo(() => {
+    if (!currentDoc) return '';
+    return (currentDoc.id && liveDocContent[currentDoc.id]) || currentDoc.content || '';
+  }, [currentDoc, liveDocContent]);
+
   // Configure Marked & Render HTML
   const renderedHtml = useMemo(() => {
     if (!currentDoc || !docsData) return '';
@@ -340,7 +401,7 @@ export const DocumentationPage: React.FC = () => {
       `;
     };
 
-    let rawHtml = marked.parse(currentDoc.content, { renderer, gfm: true }) as string;
+    let rawHtml = marked.parse(activeMarkdown, { renderer, gfm: true }) as string;
 
     // Transform GitHub Alert Callouts: [!NOTE], [!TIP], [!IMPORTANT], [!WARNING], [!CAUTION]
     rawHtml = rawHtml.replace(
@@ -588,7 +649,7 @@ export const DocumentationPage: React.FC = () => {
   const handleCopyRaw = async () => {
     if (!currentDoc) return;
     try {
-      await navigator.clipboard.writeText(currentDoc.content);
+      await navigator.clipboard.writeText(activeMarkdown);
       setRawCopied(true);
       showToast('Raw markdown copied to clipboard!');
       setTimeout(() => setRawCopied(false), 2000);
@@ -902,7 +963,7 @@ export const DocumentationPage: React.FC = () => {
                   resize: 'none',
                 }}
                 readOnly
-                value={currentDoc?.content || ''}
+                value={activeMarkdown}
               />
             </div>
             <div className="docs-modal-footer">

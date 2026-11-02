@@ -31,11 +31,12 @@ def validate_docs_and_releases() -> int:
                 errors.append("docs-data.json must be a JSON object")
             else:
                 docs = data.get("documents", {})
-                if len(docs) < 15:
-                    errors.append(f"Expected at least 15 technical documentation guides, found {len(docs)}")
+                if len(docs) < 19:
+                    errors.append(f"Expected at least 19 technical documentation guides, found {len(docs)}")
 
                 essential_guides = [
-                    "overview", "architecture", "core-engines",
+                    "overview", "docs-index", "architecture", "core-engines",
+                    "gui-design-system", "adaptive-gui-design-plan",
                     "scanner-engine", "quarantine-vault", "cli-reference", "security-model"
                 ]
                 for eg in essential_guides:
@@ -61,7 +62,8 @@ def validate_docs_and_releases() -> int:
             print(f"   • {err}")
         return 1
 
-    print("✅ Documentation guides (18 guides in docs-data.json) and release assets verified successfully.")
+    docs_count = len(docs) if 'docs' in locals() and isinstance(docs, dict) else 19
+    print(f"✅ Documentation guides ({docs_count} guides in docs-data.json) and release assets verified successfully.")
     return 0
 
 

@@ -114,22 +114,27 @@ def main():
 
     tasks = [
         CheckTask(
-            name="1. Technical Guides & Release Metadata Audit",
-            command=["{PYTHON}", "automation-scripts/audits/validate_docs_and_releases.py"],
-            description="Validates 17+ doc guides and release asset configuration"
+            name="1. Compile Documentation Data Store",
+            command=["{PYTHON}", "automation-scripts/build_docs_data.py"],
+            description="Compiles pyEGClamUI-Docs into public/data/docs-data.json and docs-data.js"
         ),
         CheckTask(
-            name="2. Desktop UI Simulator State Matrix Audit",
+            name="2. Technical Guides & Release Metadata Audit",
+            command=["{PYTHON}", "automation-scripts/audits/validate_docs_and_releases.py"],
+            description="Validates 19+ doc guides and release asset configuration"
+        ),
+        CheckTask(
+            name="3. Desktop UI Simulator State Matrix Audit",
             command=["{PYTHON}", "automation-scripts/audits/audit_simulator_integrity.py"],
             description="Verifies secure/warning/critical states and scan simulation"
         ),
         CheckTask(
-            name="3. Documentation Links & Anchors Audit",
+            name="4. Documentation Links & Anchors Audit",
             command=["{PYTHON}", "automation-scripts/audits/audit_doc_links.py"],
             description="Verifies all relative links and anchors in docs/ and README.md resolve"
         ),
         CheckTask(
-            name="4. TypeScript & Vite Production Bundle",
+            name="5. TypeScript & Vite Production Bundle",
             command=["npm", "run", "build"],
             description="Validates clean compilation (tsc && vite build) with zero errors"
         ),

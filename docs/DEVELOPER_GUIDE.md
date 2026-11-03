@@ -184,13 +184,15 @@ Follow this whenever you update the website codebase, routing, styles, or docume
 
 ### 2. Synchronizing New pyEGClamUI Desktop Releases (`v3.2.x`):
 When a new desktop release of `pyEGClamUI` is published on GitHub:
-1. **Frontend Hook is Fully Dynamic**: `useGitHubRelease()` queries GitHub Releases API with a 15-minute client cache; download badges and links update automatically for end users.
-2. **Synchronize Offline Documentation**:
+1. **Run the One-Command Sync Script**:
    ```bash
    python3 automation-scripts/sync_docs_from_github.py
    ```
-   This downloads the latest markdown manuals and regenerates `public/data/docs-data.json`.
-3. **Update Notification Bell Fallback**:
+   This automatically:
+   - Queries GitHub API for the latest release tag (e.g. `v3.2.0`) and updates `site-config.json` (`project.version`).
+   - Downloads all latest technical markdown guides into `pyEGClamUI-Docs/`.
+   - Recompiles `public/data/docs-data.json` and `public/data/docs-data.js` for 0ms offline-first loading.
+2. **Update Notification Bell Fallback**:
    Prepend the new release announcement into [`public/data/updates.json`](../public/data/updates.json):
    ```json
    {
@@ -203,9 +205,9 @@ When a new desktop release of `pyEGClamUI` is published on GitHub:
      "link": "updates#v3-2-1"
    }
    ```
-4. Verify doc links:
+3. **Verify All Checks & Audits**:
    ```bash
-   python3 automation-scripts/audits/audit_doc_links.py
+   python3 automation-scripts/run_all_checks.py
    ```
 
 

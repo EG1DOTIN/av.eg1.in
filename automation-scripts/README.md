@@ -8,7 +8,7 @@ This directory contains standalone Python maintenance utilities, documentation s
 
 | Script | Purpose | When to Run |
 |---|---|---|
-| [`sync_docs_from_github.py`](file:///home/gautam/AntigravityProjects/EG1-LIVE-WEBSITES/AV-WEBSITE/av.eg1.in/automation-scripts/sync_docs_from_github.py) | Fetches latest markdown documents and images from `EG1DOTIN/pyEGClamUI` GitHub repo (`main` branch) and rebuilds offline doc stores. | Run whenever documentation in the desktop app repository is updated. |
+| [`sync_docs_from_github.py`](file:///home/gautam/AntigravityProjects/EG1-LIVE-WEBSITES/AV-WEBSITE/av.eg1.in/automation-scripts/sync_docs_from_github.py) | Fetches latest release tag (updates `site-config.json`) and markdown documents/images from `EG1DOTIN/pyEGClamUI` GitHub repo (`main` branch) and rebuilds offline doc stores. | Run whenever documentation or a new software release is published in the desktop app repository. |
 | [`build_docs_data.py`](file:///home/gautam/AntigravityProjects/EG1-LIVE-WEBSITES/AV-WEBSITE/av.eg1.in/automation-scripts/build_docs_data.py) | Compiles local markdown files in `pyEGClamUI-Docs/` into `public/data/docs-data.json` and `docs-data.js` with mapped link aliases. | Invoked automatically by `sync_docs_from_github.py` or manually during local doc edits. |
 | [`run_all_checks.py`](file:///home/gautam/AntigravityProjects/EG1-LIVE-WEBSITES/AV-WEBSITE/av.eg1.in/automation-scripts/run_all_checks.py) | Master runner executing TypeScript validation, production build, doc link audits, and release verification. | Run prior to committing or deploying changes to `av.eg1.in`. |
 

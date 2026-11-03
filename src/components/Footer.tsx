@@ -66,7 +66,7 @@ export const Footer: React.FC<FooterProps> = ({
               <Logo
                 size={24}
                 showText={true}
-                onClick={onNavigate ? () => onNavigate('index.html') : undefined}
+                onClick={onNavigate ? () => onNavigate('index') : undefined}
               />
             </div>
             <p className="av-footer-brand-desc">
@@ -79,37 +79,37 @@ export const Footer: React.FC<FooterProps> = ({
             <div className="av-footer-col-title">Navigation</div>
             <ul className="av-footer-links">
               <li>
-                <a href="index.html" onClick={(e) => handleLinkClick(e, 'index.html')}>
+                <a href="index" onClick={(e) => handleLinkClick(e, 'index')}>
                   Home
                 </a>
               </li>
               <li>
-                <a href="documentation.html" onClick={(e) => handleLinkClick(e, 'documentation.html')}>
+                <a href="documentation" onClick={(e) => handleLinkClick(e, 'documentation')}>
                   Docs
                 </a>
               </li>
               <li>
-                <a href="documentation.html#features" onClick={(e) => handleLinkClick(e, 'documentation.html#features')}>
+                <a href="documentation#features" onClick={(e) => handleLinkClick(e, 'documentation#features')}>
                   Features
                 </a>
               </li>
               <li>
-                <a href="ui-preview.html" onClick={(e) => handleLinkClick(e, 'ui-preview.html')}>
+                <a href="ui-preview" onClick={(e) => handleLinkClick(e, 'ui-preview')}>
                   UI Preview
                 </a>
               </li>
               <li>
-                <a href="download.html" onClick={(e) => handleLinkClick(e, 'download.html')}>
+                <a href="download" onClick={(e) => handleLinkClick(e, 'download')}>
                   Download
                 </a>
               </li>
               <li>
-                <a href="getting-started.html" onClick={(e) => handleLinkClick(e, 'getting-started.html')}>
+                <a href="getting-started" onClick={(e) => handleLinkClick(e, 'getting-started')}>
                   Getting Started
                 </a>
               </li>
               <li>
-                <a href="updates.html" onClick={(e) => handleLinkClick(e, 'updates.html')}>
+                <a href="updates" onClick={(e) => handleLinkClick(e, 'updates')}>
                   Updates
                 </a>
               </li>
@@ -121,12 +121,12 @@ export const Footer: React.FC<FooterProps> = ({
             <div className="av-footer-col-title">Resources</div>
             <ul className="av-footer-links">
               <li>
-                <a href="about.html" onClick={(e) => handleLinkClick(e, 'about.html')}>
+                <a href="about" onClick={(e) => handleLinkClick(e, 'about')}>
                   About &amp; FAQ
                 </a>
               </li>
               <li>
-                <a href="updates.html" onClick={(e) => handleLinkClick(e, 'updates.html')}>
+                <a href="updates" onClick={(e) => handleLinkClick(e, 'updates')}>
                   Release History
                 </a>
               </li>
@@ -198,7 +198,7 @@ export const Footer: React.FC<FooterProps> = ({
               </li>
               <li>
                 <a
-                  href={sanitizeUrl('https://www.eg1.in/contact')}
+                  href={sanitizeUrl('https://eg1.in/contact')}
                   target="_blank"
                   rel="noopener noreferrer"
                   data-config="contactUrl"
@@ -208,7 +208,7 @@ export const Footer: React.FC<FooterProps> = ({
               </li>
               <li>
                 <a
-                  href={sanitizeUrl('https://eg1.in/privacypolicy.html')}
+                  href={sanitizeUrl('https://eg1.in/privacypolicy')}
                   target="_blank"
                   rel="noopener noreferrer"
                   data-config="privacyPolicy"

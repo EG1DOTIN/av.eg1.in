@@ -177,6 +177,7 @@ export const DocumentationPage: React.FC = () => {
     setMobileDrawerOpen(false);
 
     const newUrl = new URL(window.location.href);
+    newUrl.pathname = newUrl.pathname.replace(/\.html$/, '');
     newUrl.searchParams.set('doc', resolvedId);
     if (targetAnchor) {
       newUrl.hash = targetAnchor;
@@ -819,9 +820,9 @@ export const DocumentationPage: React.FC = () => {
             {/* Header Toolbar */}
             <div className="docs-toolbar">
               <div className="docs-breadcrumbs">
-                <a href="index.html">Home</a>
+                <a href="index">Home</a>
                 <span className="docs-breadcrumbs-sep">/</span>
-                <a href="documentation.html">Docs</a>
+                <a href="documentation">Docs</a>
                 <span className="docs-breadcrumbs-sep">/</span>
                 <span>{currentDoc?.category || 'General'}</span>
                 <span className="docs-breadcrumbs-sep">/</span>

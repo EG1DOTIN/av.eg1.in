@@ -18,13 +18,20 @@ import { AboutPage } from './pages/AboutPage';
 
 // Exact navigation items matching av.eg1.in/partials/header.html
 const CLAMUI_NAV_LINKS: NavLinkItem[] = [
-  { label: 'Home', href: 'index.html' },
-  { label: 'Docs', href: 'documentation.html' },
-  { label: 'UI Preview', href: 'ui-preview.html' },
-  { label: 'Download', href: 'download.html' },
-  { label: 'Getting Started', href: 'getting-started.html' },
-  { label: 'About & FAQ', href: 'about.html' },
+  { label: 'Home', href: 'index' },
+  { label: 'Docs', href: 'documentation' },
+  { label: 'UI Preview', href: 'ui-preview' },
+  { label: 'Download', href: 'download' },
+  { label: 'Getting Started', href: 'getting-started' },
+  { label: 'About & FAQ', href: 'about' },
 ];
+
+const cleanRoute = (path: string): string => {
+  const raw = path.replace(/^\//, '').split('?')[0].split('#')[0].replace(/\.html$/, '');
+  if (raw === 'how-to-use') return 'getting-started';
+  if (raw === 'docs') return 'documentation';
+  return raw || 'index';
+};
 
 export const App: React.FC = () => {
   // Opt-in anonymous telemetry writer (GDPR compliant, 50-record batched bucket)
@@ -34,65 +41,54 @@ export const App: React.FC = () => {
   });
 
   const [currentPath, setCurrentPath] = useState<string>(() => {
-    const raw = window.location.pathname.replace(/^\//, '');
-    if (raw === 'how-to-use.html' || raw === 'how-to-use') {
-      return 'getting-started.html';
-    }
-    return raw || 'index.html';
+    return cleanRoute(window.location.pathname);
   });
 
   useEffect(() => {
     const handlePopState = () => {
-      const raw = window.location.pathname.replace(/^\//, '');
-      if (raw === 'how-to-use.html' || raw === 'how-to-use') {
-        setCurrentPath('getting-started.html');
-      } else {
-        setCurrentPath(raw || 'index.html');
-      }
+      setCurrentPath(cleanRoute(window.location.pathname));
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
   const navigateTo = (path: string) => {
-    // Smooth legacy route redirect
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+      window.open(path, '_blank', 'noopener,noreferrer');
+      return;
+    }
     let target = path;
     if (target === 'how-to-use.html' || target === '/how-to-use.html' || target === 'how-to-use' || target === '/how-to-use') {
-      target = 'getting-started.html';
+      target = 'getting-started';
     }
 
-    const cleanPath = target.startsWith('/') ? target : `/${target}`;
-    window.history.pushState(null, '', cleanPath);
-    const normalized = target.replace(/^\//, '');
-    setCurrentPath(normalized || 'index.html');
+    const clean = cleanRoute(target);
+    const query = path.includes('?') ? `?${path.split('?')[1]}` : '';
+    const hash = path.includes('#') ? `#${path.split('#')[1]}` : '';
+    const targetUrl = clean === 'index' ? '/' : `/${clean}`;
+    window.history.pushState(null, '', `${targetUrl}${query}${hash}`);
+    setCurrentPath(clean);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const renderCurrentPage = () => {
-    const p = currentPath.split('?')[0].split('#')[0].toLowerCase();
+    const p = currentPath.split('?')[0].split('#')[0].toLowerCase().replace(/\.html$/, '');
     switch (p) {
-      case 'download.html':
       case 'download':
         return <DownloadPage onNavigate={navigateTo} />;
-      case 'documentation.html':
       case 'docs':
       case 'documentation':
         return <DocumentationPage />;
-      case 'getting-started.html':
       case 'getting-started':
-      case 'how-to-use.html':
       case 'how-to-use':
         return <GettingStartedPage onNavigate={navigateTo} />;
-      case 'ui-preview.html':
       case 'ui-preview':
         return <UiPreviewPage />;
-      case 'updates.html':
       case 'updates':
         return <UpdatesPage />;
-      case 'about.html':
       case 'about':
         return <AboutPage />;
-      case 'index.html':
+      case 'index':
       case '':
       default:
         return <HomePage onNavigate={navigateTo} />;
@@ -109,7 +105,7 @@ export const App: React.FC = () => {
             <Logo
               size={32}
               showText={true}
-              onClick={() => navigateTo('index.html')}
+              onClick={() => navigateTo('index')}
             />
           }
           navLinks={CLAMUI_NAV_LINKS}
@@ -128,7 +124,7 @@ export const App: React.FC = () => {
         <Footer onNavigate={navigateTo} />
 
         {/* Telemetry Consent Banner with 1-Click Opt-Out */}
-        <ConsentBanner privacyPolicyUrl="https://eg1.in/privacypolicy.html" />
+        <ConsentBanner privacyPolicyUrl="https://eg1.in/privacypolicy" />
       </div>
     </ThemeProvider>
   );

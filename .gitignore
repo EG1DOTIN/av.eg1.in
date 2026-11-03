@@ -22,6 +22,10 @@ firebase-debug.log*
 firestore-debug.log*
 *.log
 
+# Python Bytecode
+__pycache__/
+*.pyc
+
 # OS & Editor
 .DS_Store
 Thumbs.db

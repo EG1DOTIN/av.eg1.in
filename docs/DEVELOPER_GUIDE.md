@@ -137,3 +137,75 @@ npm run preview
 firebase deploy --only hosting
 ```
 
+---
+
+## 🏷️ 7. How to Bump & Release Portal Version vs Desktop App Releases
+
+Understanding the two separate version lifecycles in `av.eg1.in`:
+
+```mermaid
+flowchart TD
+    subgraph TrackA["Track A: Portal Application Version (av.eg1.in)"]
+        SiteVer["package.json 'version': 4.0.0 → 4.0.1"]
+        SiteDesc["Web SPA fixes, UI preview updates, routing hardening, docs layout"]
+    end
+
+    subgraph TrackB["Track B: Desktop Application Releases (pyEGClamUI)"]
+        AppVer["GitHub Releases API: v3.2.0, v3.2.1, etc."]
+        AppDesc["Desktop binaries, Qt GUI engine, ClamAV scanning daemon"]
+        SyncCmd["python3 automation-scripts/sync_docs_from_github.py"]
+    end
+
+    SiteVer --> SiteDesc
+    AppVer --> AppDesc --> SyncCmd
+```
+
+### 1. Bumping the Portal Web Application Version (`4.0.x`):
+Follow this whenever you update the website codebase, routing, styles, or documentation layout:
+1. Update `"version"` in [`package.json`](../package.json):
+   ```json
+   {
+     "name": "av-eg1-in",
+     "version": "4.0.1",
+     ...
+   }
+   ```
+2. Build and verify:
+   ```bash
+   npm run build
+   python3 ../../HELP-DOCS/run_all_workspace_checks.py
+   ```
+3. Commit and deploy:
+   ```bash
+   git add package.json
+   git commit -m "chore(release): bump av.eg1.in portal to 4.0.1"
+   firebase deploy --only hosting
+   ```
+
+### 2. Synchronizing New pyEGClamUI Desktop Releases (`v3.2.x`):
+When a new desktop release of `pyEGClamUI` is published on GitHub:
+1. **Frontend Hook is Fully Dynamic**: `useGitHubRelease()` queries GitHub Releases API with a 15-minute client cache; download badges and links update automatically for end users.
+2. **Synchronize Offline Documentation**:
+   ```bash
+   python3 automation-scripts/sync_docs_from_github.py
+   ```
+   This downloads the latest markdown manuals and regenerates `public/data/docs-data.json`.
+3. **Update Notification Bell Fallback**:
+   Prepend the new release announcement into [`public/data/updates.json`](../public/data/updates.json):
+   ```json
+   {
+     "id": "v3-2-1",
+     "title": "pyEGClamUI v3.2.1 Released",
+     "date": "November 2026",
+     "badge": "Latest Release",
+     "badgeType": "emerald",
+     "summary": "Key release highlights...",
+     "link": "updates#v3-2-1"
+   }
+   ```
+4. Verify doc links:
+   ```bash
+   python3 automation-scripts/audits/audit_doc_links.py
+   ```
+
+

@@ -10,6 +10,7 @@ in av.eg1.in are properly populated with clean structures:
 
 import sys
 import json
+import re
 from pathlib import Path
 
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent
@@ -55,6 +56,21 @@ def validate_docs_and_releases() -> int:
             errors.append("DownloadPage missing GitHub repository reference URL")
         if "SHA256SUMS" not in content and "checksum" not in content.lower():
             errors.append("DownloadPage missing checksum integrity verification logic")
+
+    # 3. Validate site-config.json release configuration
+    cfg_file = ROOT_DIR / "site-config.json"
+    if not cfg_file.exists():
+        errors.append(f"Missing {cfg_file}")
+    else:
+        try:
+            cfg = json.loads(cfg_file.read_text(encoding="utf-8"))
+            ver = (cfg.get("project", {}).get("version") or cfg.get("release", {}).get("version", "")).strip()
+            if not ver:
+                errors.append("site-config.json missing 'project.version'")
+            elif not re.match(r"^\d+\.\d+(\.\d+)?(-[a-zA-Z0-9_.-]+)?$", ver):
+                errors.append(f"site-config.json has invalid 'project.version': '{ver}'")
+        except Exception as e:
+            errors.append(f"site-config.json parsing error: {e}")
 
     if errors:
         print(f"❌ Documentation & release validation failed with {len(errors)} error(s):")

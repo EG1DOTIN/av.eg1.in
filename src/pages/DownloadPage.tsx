@@ -626,7 +626,7 @@ export const DownloadPage: React.FC<DownloadPageProps> = ({ onNavigate }) => {
                   <Button
                     variant="secondary"
                     size="sm"
-                    onClick={() => (onNavigate ? onNavigate('documentation.html') : (window.location.href = 'documentation.html'))}
+                    onClick={() => (onNavigate ? onNavigate('documentation') : (window.location.href = 'documentation'))}
                   >
                     Read ClamAV Setup &amp; Architecture Docs &rarr;
                   </Button>

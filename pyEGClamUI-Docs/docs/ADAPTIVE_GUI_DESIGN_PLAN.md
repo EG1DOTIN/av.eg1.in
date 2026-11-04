@@ -223,5 +223,3 @@ This deterministic design guarantees:
 1. **Zero Guesswork**: The system never attempts to load PySide6 on hardware incapable of supporting it.
 2. **True Universality**: pyEGClamUI delivers a native desktop window on every machine, from high-end multi-core 64-bit workstations down to 32-bit antiX VirtualBox environments with under 1 GB RAM.
 3. **Core Preservation**: Existing business logic and the modern Qt6 interface remain 100% clean and uncompromised.
-
-

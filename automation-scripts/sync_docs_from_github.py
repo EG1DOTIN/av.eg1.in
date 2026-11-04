@@ -34,16 +34,48 @@ def get_repo_slug() -> str:
     return "EG1DOTIN/pyEGClamUI"
 
 
+def sync_release_version(repo_slug: str, headers: dict) -> None:
+    """Fetches latest release tag and updates site-config.json release version."""
+    print(f"\nChecking latest release on GitHub for '{repo_slug}'...")
+    release_url = f"https://api.github.com/repos/{repo_slug}/releases/latest"
+    req = urllib.request.Request(release_url, headers=headers)
+    try:
+        with urllib.request.urlopen(req, timeout=12) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+            tag = data.get("tag_name") or data.get("name")
+            if tag and CONFIG_PATH.exists():
+                clean_ver = tag.strip().lstrip("vV")
+                with open(CONFIG_PATH, "r", encoding="utf-8") as f:
+                    cfg = json.load(f)
+                old_ver = cfg.get("project", {}).get("version", "")
+                if "project" not in cfg:
+                    cfg["project"] = {}
+                cfg["project"]["version"] = clean_ver
+                cfg["project"]["rawTag"] = tag.strip()
+                if data.get("published_at"):
+                    cfg["project"]["publishedAt"] = data["published_at"]
+                with open(CONFIG_PATH, "w", encoding="utf-8") as f:
+                    json.dump(cfg, f, indent=2, ensure_ascii=False)
+                    f.write("\n")
+                print(f"  [SYNCED] Release version in site-config.json: {old_ver} -> {clean_ver} ({tag.strip()})")
+    except Exception as e:
+        print(f"  [INFO] Could not fetch latest release for {repo_slug}: {e}")
+
+
 def sync_docs() -> bool:
     repo_slug = get_repo_slug()
     github_api_tree = f"https://api.github.com/repos/{repo_slug}/git/trees/main?recursive=1"
     github_raw_base = f"https://raw.githubusercontent.com/{repo_slug}/main/"
 
-    print(f"Connecting to GitHub API for '{repo_slug}' to discover repository documents...")
     headers = {"User-Agent": "pyEGClamUI-DocSync/1.0", "Accept": "application/vnd.github.v3+json"}
     token = os.environ.get("GITHUB_TOKEN")
     if token:
         headers["Authorization"] = f"Bearer {token}"
+
+    # 1. Sync latest release version metadata into site-config.json
+    sync_release_version(repo_slug, headers)
+
+    print(f"\nConnecting to GitHub API for '{repo_slug}' to discover repository documents...")
 
     req = urllib.request.Request(github_api_tree, headers=headers)
 

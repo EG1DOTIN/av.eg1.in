@@ -153,14 +153,14 @@ export const GettingStartedPage: React.FC<GettingStartedPageProps> = ({ onNaviga
             <Button
               variant="secondary"
               size="md"
-              onClick={() => navigateTo('documentation.html')}
+              onClick={() => navigateTo('documentation')}
             >
               Explore Docs &rarr;
             </Button>
             <Button
               variant="primary"
               size="md"
-              onClick={() => navigateTo('download.html')}
+              onClick={() => navigateTo('download')}
             >
               Download Binaries
             </Button>

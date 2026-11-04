@@ -5,6 +5,7 @@ on:
     branches: [ main, dev, 'feature/**' ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   verify:
@@ -27,6 +28,11 @@ jobs:
 
       - name: Install Node Dependencies
         run: npm install
+
+      - name: Sync Latest Release & Documentation
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 automation-scripts/sync_docs_from_github.py
 
       - name: Run Master pyEGClamUI Verification & Build
         run: python3 automation-scripts/run_all_checks.py

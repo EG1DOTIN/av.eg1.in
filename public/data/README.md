@@ -8,9 +8,9 @@ This directory contains the pre-compiled documentation database and update chang
 
 | File | Purpose | Source of Truth |
 |---|---|---|
-| [`docs-data.json`](file:///home/gautam/AntigravityProjects/EG1-LIVE-WEBSITES/AV-WEBSITE/av.eg1.in/public/data/docs-data.json) | Complete pre-indexed JSON catalog containing 19 full technical Markdown guides, navigation groupings, and cross-link resolution maps. | Generated automatically by `automation-scripts/sync_docs_from_github.py` from `EG1DOTIN/pyEGClamUI`. |
-| [`docs-data.js`](file:///home/gautam/AntigravityProjects/EG1-LIVE-WEBSITES/AV-WEBSITE/av.eg1.in/public/data/docs-data.js) | Offline fallback bundle assigning `window.__PYEGCLAMUI_DOCS_DATA__` for immediate synchronous execution in restricted environments. | Generated alongside `docs-data.json`. |
-| [`updates.json`](file:///home/gautam/AntigravityProjects/EG1-LIVE-WEBSITES/AV-WEBSITE/av.eg1.in/public/data/updates.json) | Static fallback release changelog and notifications feed. | Maintained locally and synchronized with major GitHub release notes. |
+| [`docs-data.json`](./docs-data.json) | Complete pre-indexed JSON catalog containing 19 full technical Markdown guides, navigation groupings, and cross-link resolution maps. | Generated automatically by `automation-scripts/sync_docs_from_github.py` from `EG1DOTIN/pyEGClamUI`. |
+| [`docs-data.js`](./docs-data.js) | Offline fallback bundle assigning `window.__PYEGCLAMUI_DOCS_DATA__` for immediate synchronous execution in restricted environments. | Generated alongside `docs-data.json`. |
+| [`updates.json`](./updates.json) | Static fallback release changelog and notifications feed. | Maintained locally and synchronized with major GitHub release notes. |
 
 ---
 

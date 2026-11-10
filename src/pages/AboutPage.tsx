@@ -2,6 +2,16 @@ import React, { useState } from 'react';
 import { Container } from 'eg-web-core';
 import './AboutPage.css';
 
+/**
+ * About page for pyEGClamUI explaining architecture, security philosophy, and FAQs.
+ *
+ * @returns AboutPage view component
+ *
+ * @example
+ * ```tsx
+ * <Route path="/about" element={<AboutPage />} />
+ * ```
+ */
 export const AboutPage: React.FC = () => {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 

@@ -6,6 +6,17 @@ interface GettingStartedPageProps {
   onNavigate?: (path: string) => void;
 }
 
+/**
+ * Quick start guide walkthrough for pyEGClamUI configuration and scanning.
+ *
+ * @param props - GettingStartedPageProps configuration
+ * @returns GettingStartedPage view component
+ *
+ * @example
+ * ```tsx
+ * <GettingStartedPage onNavigate={navigate} />
+ * ```
+ */
 export const GettingStartedPage: React.FC<GettingStartedPageProps> = ({ onNavigate }) => {
   const navigateTo = (path: string) => {
     if (onNavigate) {

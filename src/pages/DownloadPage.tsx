@@ -10,6 +10,17 @@ interface DownloadPageProps {
   onNavigate?: (path: string) => void;
 }
 
+/**
+ * Multi-platform download portal for pyEGClamUI with direct installers and package managers.
+ *
+ * @param props - DownloadPageProps configuration
+ * @returns DownloadPage view component
+ *
+ * @example
+ * ```tsx
+ * <DownloadPage onNavigate={navigate} />
+ * ```
+ */
 export const DownloadPage: React.FC<DownloadPageProps> = ({ onNavigate }) => {
   const [quickTab, setQuickTab] = useState<QuickInstallTab>('quick-win');
   const [pkgTab, setPkgTab] = useState<PkgMgrTab>('win-pkg');

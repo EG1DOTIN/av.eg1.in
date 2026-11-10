@@ -1,0 +1,39 @@
+/**
+ * UiPreviewPage.css
+ * pyEGClamUI Desktop Simulator Interface Preview styles
+ */
+
+.av-ui-preview-page {
+  padding: 36px 0 72px;
+}
+
+.av-ui-preview-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.av-ui-preview-tag {
+  margin: 0 auto 12px;
+}
+
+.av-ui-preview-title {
+  font-size: clamp(2rem, 1.6rem + 1.8vw, 2.8rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+}
+
+.av-ui-preview-subtitle {
+  color: var(--text-secondary);
+  font-size: clamp(0.95rem, 0.9rem + 0.25vw, 1.1rem);
+  max-width: 720px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.av-ui-preview-simulator-wrapper {
+  max-width: 960px;
+  margin: 0 auto;
+}
+

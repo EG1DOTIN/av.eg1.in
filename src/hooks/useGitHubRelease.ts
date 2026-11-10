@@ -132,6 +132,13 @@ const DEFAULT_ASSETS: ReleaseAssets = {
 /**
  * Shared React hook to dynamically fetch and cache latest release information
  * directly from GitHub Releases API for pyEGClamUI.
+ *
+ * @returns Current GitHub release state including version, assets, and loading status
+ *
+ * @example
+ * ```tsx
+ * const { version, assets, loading } = useGitHubRelease();
+ * ```
  */
 export function useGitHubRelease(): GitHubReleaseState {
   const [version, setVersion] = useState<string>('3.2.0');

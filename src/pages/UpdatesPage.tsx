@@ -42,6 +42,16 @@ function parseReleaseHighlights(body?: string): string[] {
   return highlights;
 }
 
+/**
+ * Updates and release history timeline for pyEGClamUI powered by GitHub Releases.
+ *
+ * @returns UpdatesPage view component
+ *
+ * @example
+ * ```tsx
+ * <Route path="/updates" element={<UpdatesPage />} />
+ * ```
+ */
 export const UpdatesPage: React.FC = () => {
   const { version: latestVersion, releaseDate, assets, releases } = useGitHubRelease();
 

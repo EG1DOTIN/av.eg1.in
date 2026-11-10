@@ -9,6 +9,17 @@ interface HomePageProps {
 
 type PlatformTab = 'windows' | 'linux' | 'macos' | 'pip';
 
+/**
+ * pyEGClamUI antivirus landing page featuring quick installation tabs and capability cards.
+ *
+ * @param props - HomePageProps configuration
+ * @returns HomePage view component
+ *
+ * @example
+ * ```tsx
+ * <HomePage onNavigate={navigate} />
+ * ```
+ */
 export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
   const { version, releaseStage } = useGitHubRelease();
   const [activePlatform, setActivePlatform] = useState<PlatformTab>('windows');

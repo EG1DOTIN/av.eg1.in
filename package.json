@@ -1,7 +1,7 @@
 {
   "name": "av-eg1-in",
   "private": true,
-  "version": "4.0.1",
+  "version": "4.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -11,6 +11,7 @@
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "marked": "^15.0.4",
     "eg-web-core": "github:EG1DOTIN/eg-web-core"
   },
   "devDependencies": {

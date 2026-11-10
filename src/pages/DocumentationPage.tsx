@@ -73,6 +73,16 @@ function slugify(text: string): string {
     .replace(/^-+|-+$/g, '');
 }
 
+/**
+ * Comprehensive pyEGClamUI documentation viewer with sidebar navigation, search, and Markdown rendering.
+ *
+ * @returns DocumentationPage view component
+ *
+ * @example
+ * ```tsx
+ * <Route path="/documentation" element={<DocumentationPage />} />
+ * ```
+ */
 export const DocumentationPage: React.FC = () => {
   const [docsData, setDocsData] = useState<DocsData | null>(null);
   const [loading, setLoading] = useState(true);

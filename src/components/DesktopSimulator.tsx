@@ -49,6 +49,17 @@ export interface DesktopSimulatorProps {
   version?: string;
 }
 
+/**
+ * Interactive desktop GUI simulator replicating the pyEGClamUI Qt application.
+ *
+ * @param props - DesktopSimulatorProps configuration
+ * @returns Desktop simulator UI component
+ *
+ * @example
+ * ```tsx
+ * <DesktopSimulator initialTab="Scan" initialStatus="protected" />
+ * ```
+ */
 export const DesktopSimulator: React.FC<DesktopSimulatorProps> = ({
   initialTab = 'Status',
   initialStatus = 'protected',

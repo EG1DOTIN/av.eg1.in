@@ -1,11 +1,13 @@
 {
   "project": {
     "name": "pyEGClamUI",
-    "version": "3.2.0",
-    "releaseDate": "October 2026",
+    "version": "3.2.1",
+    "releaseDate": "November 2026",
     "releaseStage": "Beta Release",
     "tagline": "An Open-Source, Cross-Platform Desktop GUI for ClamAV",
-    "license": "GNU GPL-3.0"
+    "license": "GNU GPL-3.0",
+    "rawTag": "v3.2.1",
+    "publishedAt": "2026-11-27T05:39:07Z"
   },
   "github": {
     "repo": "https://github.com/EG1DOTIN/pyEGClamUI",

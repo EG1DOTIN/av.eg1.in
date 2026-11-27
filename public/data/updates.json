@@ -1,10 +1,19 @@
 [
   {
+    "id": "v3-2-1",
+    "title": "pyEGClamUI v3.2.1 Released",
+    "date": "November 27, 2026",
+    "badge": "Latest Release",
+    "badgeType": "emerald",
+    "summary": "Resolves critical Linux/Windows runtime crashes, fixes cross-thread Qt UI updates, optimizes scanning/detection hot paths, enforces version Single Source of Truth (SSOT).",
+    "link": "updates#v3-2-1"
+  },
+  {
     "id": "v3-2-0",
     "title": "pyEGClamUI v3.2.0 Released",
     "date": "October 19, 2026",
-    "badge": "Latest Release",
-    "badgeType": "emerald",
+    "badge": "Release",
+    "badgeType": "sky",
     "summary": "Adaptive Dual-Tier GUI Architecture (Modern Qt6 + pyEGClamUI Lite Tkinter), Intelligent RAM-Adaptive ClamAV Provisioning protecting low-resource systems from OOM, pre-flight engine guards eliminating false-clean reports, and standardized CLI command wrappers.",
     "link": "updates#v3-2-0"
   },
